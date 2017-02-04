@@ -1,0 +1,7 @@
+var locParams = "lat=50.0775739&lon=14.4289344";
+// locParams = "q=Prague";
+var appId = "YOUR_API_KEY";
+var lang = "sk"
+var units = "metric"; 
+  
+var API_PARAMS = locParams + "&appid=" + appId + "&lang=" + lang + "&units=" + units;

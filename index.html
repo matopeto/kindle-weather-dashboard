@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport"
+          content="width=320, initial-scale=1, maximum-scale=1, user-scalable=0, target-densitydpi=medium-dpi">
+    <script src="vendor/moment-with-locales.js" type="text/javascript"></script>
+    <script src="config.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="css/weather-icons.css"/>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        #page {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #city {
+            font-size: 40px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+
+        #temp {
+            font-size: 200px;
+            display: inline-block;
+        }
+
+        .celsius {
+            font-size: 50px;
+            display: inline-block;
+            position: relative;
+            top: -100px;
+        }
+
+        .tempWrapper {
+            position: absolute;
+            right: 20px;
+            top: 70px;
+        }
+
+        #lastUpdate {
+            font-size: 10px;
+            position: absolute;
+            top: 360px;
+            left: 20px;
+        }
+
+        #description {
+            position: absolute;
+            right: 20px;
+            top: 310px;
+            font-size: 50px;
+        }
+
+        #icon {
+            font-size: 250px;
+        }
+
+        #iconWrapper {
+            position: absolute;
+            left: 30px;
+            top: 60px;
+        }
+
+        .forecast {
+            position: absolute;
+            width: 100%;
+            bottom: 40px;
+            left: 0;
+            border-top: 5px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .col {
+            width: 24.5%;
+            border-right: 1px solid black;
+            float: left;
+            text-align: center;
+            height: 280px;
+        }
+
+        .col:last-child {
+            border-right: none;
+        }
+
+        #date {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            font-size: 30px;
+        }
+
+        #sun {
+            position: absolute;
+            bottom: 0;
+            right: 20px;
+            font-size: 30px;
+        }
+
+        .forecastIconWrapper {
+            font-size: 100px;
+        }
+
+        #temp1, #temp2, #temp3, #temp4 {
+            font-size: 50px;
+        }
+
+        #time1, #time2, #time3, #time4 {
+            font-size: 35px;
+            margin-top: 10px;
+        }
+
+        #desc1, #desc2, #desc3, #desc4 {
+            font-size: 20px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var jsonp = function () {
+            return {
+                // JSONP Request
+                request: function (src, callback, id) {
+                    try {
+
+                        var self = this,
+                                script = null;
+
+                        self.done = false;
+
+                        if (typeof id === "undefined") {
+                            id = "jsonp";
+                        }
+
+                        if (document.getElementById(id) !== null) {
+                            script = document.getElementById(id);
+                            document.body.removeChild(script);
+                        }
+
+                        script = document.createElement('script');
+                        script.type = 'application/javascript';
+                        script.id = id;
+                        script.src = src;
+                        script.onload = function () {
+                            console.log("onload");
+
+                            if (typeof callback !== "undefined") {
+                                callback(self.responseObject);
+                            }
+
+                            script.onload = null;
+                            document.body.removeChild(script);
+                            script = null;
+                        }
+
+                        document.body.appendChild(script);
+                    } catch (exception) {
+                        console.log(exception);
+                    }
+                },
+
+                // JSONP Response
+                response: function (response) {
+                    try {
+                        this.responseObject = response;
+                    } catch (exception) {
+                        console.log(exception);
+                    }
+                }
+            }
+        }();
+
+
+        function refreshActualWeather() {
+            jsonp.request("http://api.openweathermap.org/data/2.5/weather?" + API_PARAMS + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+                    , function (data) {
+                        processActualWeather(data);
+                    }, "actual");
+        }
+
+        function refreshForecastWeather() {
+            jsonp.request("http://api.openweathermap.org/data/2.5/forecast?" + API_PARAMS + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+                    , function (data) {
+                        processForecastWeather(data);
+                    }, "forecast");
+        }
+
+        function refreshData() {
+            refreshActualWeather();
+            refreshForecastWeather();
+
+            window.setTimeout("refreshData()", 30 * 60 * 1000);
+        }
+
+        function processForecastWeather(data) {
+            for (var i = 0; i < forecastCount; i++) {
+                var forecast = data.list[i];
+
+                forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
+                forecastsCells[i].icon.className = "wi wi-owm-" + forecast.weather[0].id;
+                forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
+                forecastsCells[i].time.innerHTML = moment(new Date(forecast.dt * 1000)).format("LT");
+            }
+        }
+
+        function processActualWeather(data) {
+            icon.className = "wi wi-owm-" + data.weather[0].id;
+            temp.innerHTML = Math.round(data.main.temp);
+            city.innerHTML = data.name;
+            description.innerHTML = data.weather[0].description;
+            lastUpdate.innerHTML = moment(new Date()).format("LT") + "/" + moment(new Date(data.dt * 1000)).format("LT");
+
+            date.innerHTML = moment(new Date()).format("dd, ll");
+
+            sun.innerHTML = "<i class='wi wi-sunrise'></i>" + moment(new Date(data.sys.sunrise * 1000)).format("LT")
+            + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
+            //  alert(data.name);
+        }
+
+        var temp = null;
+        var icon = null;
+        var city = null;
+        var description = null;
+        var lastUpdate = null;
+        var date = null;
+        var sun = null;
+
+        var forecastsCells = null;
+
+        var forecastCount = 4;
+
+        window.addEventListener('load', function () {
+            console.log("load");
+            moment.locale("sk");
+            temp = document.getElementById("temp");
+            icon = document.getElementById("icon");
+
+
+            city = document.getElementById("city");
+            description = document.getElementById("description");
+            lastUpdate = document.getElementById("lastUpdate");
+            date = document.getElementById("date");
+            sun = document.getElementById("sun");
+
+            forecastsCells = [];
+            for (var i = 0; i < forecastCount; i++) {
+                forecastsCells.push({
+                    temp: document.getElementById("temp" + (i + 1)),
+                    icon: document.getElementById("icon" + (i + 1)),
+                    desc: document.getElementById("desc" + (i + 1)),
+                    time: document.getElementById("time" + (i + 1)),
+                });
+            }
+
+            refreshData();
+
+        });
+    </script>
+
+</head>
+
+
+<body>
+<div id="page">
+    <div id="city"></div>
+    <div id="iconWrapper"><i id="icon"></i></div>
+    <div class="tempWrapper">
+        <div id="temp"></div>
+        <!--<i class="celsius wi wi-celsius"></i>-->
+    </div>
+    <div id="description"></div>
+    <div id="lastUpdate"></div>
+    <div class="forecast">
+        <div class="col col1">
+            <div id="time1"></div>
+            <div class="forecastIconWrapper"><i id="icon1"></i></div>
+            <div id="temp1"></div>
+            <div id="desc1"></div>
+        </div>
+        <div class="col col2">
+            <div id="time2"></div>
+            <div class="forecastIconWrapper"><i id="icon2"></i></div>
+            <div id="temp2"></div>
+            <div id="desc2"></div>
+        </div>
+        <div class="col col3">
+            <div id="time3"></div>
+            <div class="forecastIconWrapper"><i id="icon3"></i></div>
+            <div id="temp3"></div>
+            <div id="desc3"></div>
+        </div>
+        <div class="col col4">
+            <div id="time4"></div>
+            <div class="forecastIconWrapper"><i id="icon4"></i></div>
+            <div id="temp4"></div>
+            <div id="desc4"></div>
+        </div>
+    </div>
+    <div id="date"></div>
+    <div id="sun"></div>
+</div>
+</body>
+</html>
