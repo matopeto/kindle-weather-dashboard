@@ -131,7 +131,7 @@
                     try {
 
                         var self = this,
-                                script = null;
+                            script = null;
 
                         self.done = false;
 
@@ -179,17 +179,17 @@
 
 
         function refreshActualWeather() {
-            jsonp.request("http://api.openweathermap.org/data/2.5/weather?" + API_PARAMS + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
-                    , function (data) {
-                        processActualWeather(data);
-                    }, "actual");
+            jsonp.request("http://api.openweathermap.org/data/2.5/weather?" + getApiParams() + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+                , function (data) {
+                    processActualWeather(data);
+                }, "actual");
         }
 
         function refreshForecastWeather() {
-            jsonp.request("http://api.openweathermap.org/data/2.5/forecast?" + API_PARAMS + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
-                    , function (data) {
-                        processForecastWeather(data);
-                    }, "forecast");
+            jsonp.request("http://api.openweathermap.org/data/2.5/forecast?" + getApiParams() + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+                , function (data) {
+                    processForecastWeather(data);
+                }, "forecast");
         }
 
         function refreshData() {
@@ -210,6 +210,42 @@
             }
         }
 
+        function getApiParams() {
+            if (getUrlParameter("api_params")) {
+                return getUrlParameter("api_params");
+            }
+
+            if (api_params) {
+                return api_params;
+            }
+
+            var appId = getUrlParameter("appId") !== null ? getUrlParameter("appId") : api_appId;
+            var lang = getUrlParameter("lang") !== null ? getUrlParameter("lang") : api_lang;
+            var units = getUrlParameter("units") !== null ? getUrlParameter("units") : api_units;
+
+            var locParams = api_locParams;
+            if (getUrlParameter("city") !== null) {
+                locParams = "q=" + encodeURIComponent(getUrlParameter("city"));
+            } else if (getUrlParameter("lat") !== null && getUrlParameter("lon") !== null) {
+                locParams = "lat=" + encodeURIComponent(getUrlParameter("lat")) + "&lon=" + encodeURIComponent(getUrlParameter("lon"));
+            }
+
+            return "" + locParams + "&appid=" + appId + "&lang=" + lang + "&units=" + units;
+        }
+
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + RegExp.escape(name) + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            if (!results) return null;
+            if (!results[1]) return '';
+            return decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        RegExp.escape = function (s) {
+            return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        };
+
         function processActualWeather(data) {
             icon.className = "wi wi-owm-" + data.weather[0].id;
             temp.innerHTML = Math.round(data.main.temp);
@@ -220,7 +256,7 @@
             date.innerHTML = moment(new Date()).format("dd, ll");
 
             sun.innerHTML = "<i class='wi wi-sunrise'></i>" + moment(new Date(data.sys.sunrise * 1000)).format("LT")
-            + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
+                + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
             //  alert(data.name);
         }
 
