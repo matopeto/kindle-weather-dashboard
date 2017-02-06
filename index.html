@@ -230,7 +230,21 @@
                 locParams = "lat=" + encodeURIComponent(getUrlParameter("lat")) + "&lon=" + encodeURIComponent(getUrlParameter("lon"));
             }
 
-            return "" + locParams + "&appid=" + appId + "&lang=" + lang + "&units=" + units;
+            var url = "";
+            if (locParams) {
+                url += locParams;
+            }
+            if (appId) {
+                url += "&appid=" + appId;
+            }
+            if (lang) {
+                url += "&lang=" + lang;
+            }
+            if (units) {
+                url += "&units=" + units;
+            }
+
+            return url;
         }
 
         function getUrlParameter(name) {
@@ -271,6 +285,9 @@
         var forecastsCells = null;
 
         var forecastCount = 4;
+
+        // Config parameters.
+        var api_params, api_appId, api_lang, api_units, api_locParams;
 
         window.addEventListener('load', function () {
             console.log("load");
