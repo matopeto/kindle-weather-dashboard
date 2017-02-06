@@ -23,16 +23,9 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 * `lat`, `lon` sets location (e.g. `lat=50&lon=14`)
 * `lang` and `units` for lang and units :)
 
-Example: https://matopeto.github.io/kindle-weather-dashboard/?city=Paris&appId=YOUR_APP_ID
-
-## Samples
-I created `API KEY` for github (it is free, but it has FUP for requests, so in real use case replace appId with your key.)
-
-#### Dashboard for Prague, metrics slovak language:
-https://matopeto.github.io/kindle-weather-dashboard/?city=Prague&lang=sk&units=metric&appId=f4c7cce581eb51ad03865fb9fb368167
-
-#### Dashboard for given gps, metric, default language:
-https://matopeto.github.io/kindle-weather-dashboard/?lat=50&lon=14&units=metric&appId=f4c7cce581eb51ad03865fb9fb368167
+Examples:
+* Dashboard for Prague, metrics slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`
+* Dashboard for given gps, metric, default language: `https://YOUR_URL/?lat=50&lon=14&units=metric&appId=YOUR_API_KEY`
 
 ## Screenshots
 
