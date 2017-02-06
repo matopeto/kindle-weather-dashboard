@@ -6,6 +6,16 @@ Simple webpage with weahter informations.
 * api source: openweathermap.org
 * configurable place, units, language
 
+# How to install
+1. clone or download repository
+2. set your location and others in `config.js`
+3. upload to your server, or simply create local (e.g with php: `php -S 192.168.0.1:80 -t .`)
+4. disable screensaver on your cindle
+ * press search button on homescreen and type: `;debugOn` and press enter on keyboard
+ * press search button again and type: `~disableScreensaver` and press enter on keyboard
+5. launch your browser and go to url of your server
+6. Dashboard don't need connection to your server (you can shutdown local server now) Dashboard calls api directly.
+
 ## Configuration
 ### with config.js
 * create config.js file from config.js.sample and set variables
