@@ -1,7 +1,7 @@
 # kindle-weather-dashboard
 
 Simple webpage with weahter informations.
-* for **Kindle 4/5 only** (for now) *Paperwhite support (or universal) in progress*
+* for **Kindle 4/5 only** and **Paperwhite 3**, *maybe works on other kindles*
 * only **portrait mode** (for now)
 * api source: openweathermap.org
 * configurable place, units, language
@@ -12,7 +12,7 @@ Simple webpage with weahter informations.
 3. upload to your server, or simply create local (e.g with php: `php -S 192.168.0.1:80 -t .`)
 4. disable screensaver on your cindle
  * press search button on homescreen and type: `;debugOn` and press enter on keyboard
- * press search button again and type: `~disableScreensaver` and press enter on keyboard
+ * press search button again and type: `~disableScreensaver` and press enter on keyboard. (On kindle Paperwhite type: `~ds`
 5. launch your browser and go to url of your server
 6. Dashboard don't need connection to your server (you can shutdown local server now) Dashboard calls api directly.
 
