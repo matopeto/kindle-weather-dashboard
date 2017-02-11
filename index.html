@@ -12,7 +12,8 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 0;
         }
 
         #page {
@@ -23,60 +24,59 @@
 
         #city {
             font-size: 40px;
+            font-size: 5.7rem;
             position: absolute;
-            top: 10px;
-            left: 20px;
+            top: 1.5%;
+            left: 3.3%;
         }
 
         #temp {
             font-size: 200px;
+            font-size: 28rem;
             display: inline-block;
-        }
-
-        .celsius {
-            font-size: 50px;
-            display: inline-block;
-            position: relative;
-            top: -100px;
         }
 
         .tempWrapper {
             position: absolute;
-            right: 20px;
-            top: 70px;
+            right: 3.3%;
+            top: 10%;
         }
 
         #lastUpdate {
             font-size: 10px;
+            font-size: 1.4rem;
             position: absolute;
-            top: 360px;
-            left: 20px;
+            bottom: 47%;
+            left: 3.3%;
         }
 
         #description {
             position: absolute;
-            right: 20px;
-            top: 310px;
+            right: 3.3%;
+            bottom: 46%;
             font-size: 50px;
+            font-size: 7rem;
         }
 
         #icon {
             font-size: 250px;
+            font-size: 35rem;
         }
 
         #iconWrapper {
             position: absolute;
-            left: 30px;
-            top: 60px;
+            left: 5%;
+            top: 8.5%;
         }
 
         .forecast {
             position: absolute;
             width: 100%;
-            bottom: 40px;
+            bottom: 6%;
             left: 0;
             border-top: 5px solid black;
             border-bottom: 1px solid black;
+            height: 39%;
         }
 
         .col {
@@ -84,7 +84,7 @@
             border-right: 1px solid black;
             float: left;
             text-align: center;
-            height: 280px;
+            height: 100%;
         }
 
         .col:last-child {
@@ -94,32 +94,38 @@
         #date {
             position: absolute;
             bottom: 0;
-            left: 20px;
+            left: 3.3%;
             font-size: 30px;
+            font-size: 4.3rem;
         }
 
         #sun {
             position: absolute;
             bottom: 0;
-            right: 20px;
+            right: 3.3%;
             font-size: 30px;
+            font-size: 4.3rem;
         }
 
         .forecastIconWrapper {
             font-size: 100px;
+            font-size: 14.2rem;
         }
 
         #temp1, #temp2, #temp3, #temp4 {
             font-size: 50px;
+            font-size: 7.1rem;
         }
 
         #time1, #time2, #time3, #time4 {
             font-size: 35px;
-            margin-top: 10px;
+            font-size: 5rem;
+            margin-top: 5%;
         }
 
         #desc1, #desc2, #desc3, #desc4 {
             font-size: 20px;
+            font-size: 2.8rem;
         }
     </style>
 
@@ -295,7 +301,6 @@
             temp = document.getElementById("temp");
             icon = document.getElementById("icon");
 
-
             city = document.getElementById("city");
             description = document.getElementById("description");
             lastUpdate = document.getElementById("lastUpdate");
@@ -314,7 +319,34 @@
 
             refreshData();
 
+            setRem("load");
         });
+
+        window.addEventListener("resize", function() {
+            setRem("resize");
+        })
+
+        // Simulating vh an vw with rem: http://stackoverflow.com/questions/13948713/is-there-any-cross-browser-javascript-for-making-vh-and-vw-units-work
+        // But kindle 4 doesn't support rem (so all sizes are fixed fallback for kindle 4)
+        // Kindle 4 viewport: 600x706 (in window.load event, window.resize event is not called)
+        // Paperwhite 3 viewport: 1072x1268 (in window.load event it is 0x0, in window.resized
+        function viewport() {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window )) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
+        }
+
+        function setRem(prefix) {
+            var v = viewport();
+            var root = document.querySelector(":root");
+            root.style.fontSize = (v.height / 100) + "px";
+           // console.log("setting root font size to: " + v.height)
+          //  alert(prefix + " viewport:" + v.width + "x" + v.height);
+        }
+
     </script>
 
 </head>
