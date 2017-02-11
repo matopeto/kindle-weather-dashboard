@@ -39,4 +39,12 @@ Examples:
 
 ## Screenshots
 
-![alt sc1.png](https://raw.githubusercontent.com/matopeto/kindle-weather-dashboard/master/screen_shot_kindle4.gif)
+### Kindle 4
+<img src="screenshot_kindle4.gif" width="300" alt="Kindle 4 screenshot" />
+
+### Kindle Paperwhite 3
+<img src="screenshot_paperwhite3.png" width="300" alt="Kindle Paperwhite 3 screenshot" />
+
+### Real devices
+<img src="real_devices.jpg" width="300" alt="Dashboard on real devices" />
+
