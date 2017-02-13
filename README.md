@@ -3,8 +3,17 @@
 Simple webpage with weahter informations.
 * tested on **Kindle 3/4/5 only** and **Paperwhite 3**, *maybe works on other kindles*,
 * only **portrait mode** (for now)
-* api source: openweathermap.org
 * configurable place, units, language
+* features:
+ * **current weather and temperature**
+ * **forecast for next 12 hours**
+ * **sunrise and sunset**
+ * **Moon phase**
+
+* Weather and forecast source: https://openweathermap.org/
+* Icons source: https://github.com/erikflowers/weather-icons
+
+<img src="real_devices.jpg" width="300" alt="Dashboard on real devices" />
 
 # How to install
 1. clone or download repository
