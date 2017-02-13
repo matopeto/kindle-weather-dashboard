@@ -275,9 +275,39 @@
 
             date.innerHTML = moment(new Date()).format("dd, ll");
 
-            sun.innerHTML = "<i class='wi wi-sunrise'></i>" + moment(new Date(data.sys.sunrise * 1000)).format("LT")
-                + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
+            sun.innerHTML = "<i class='wi " + getMoonIcon(getCurrentMoonPhase()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i>" + moment(new Date(data.sys.sunrise * 1000)).format("LT")
+                    + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
             //  alert(data.name);
+        }
+
+        /**
+         * http://www.ben-daglish.net/moon.shtml
+         * @param year
+         * @param month
+         * @param day
+         * @returns {number} They all return a single value - the phase day (0 to 1, where 0=new moon, 0.5=full etc.) for the selected date.
+         * @constructor
+         */
+        function getMoonPhase(year, month, day) {
+            var lp = 2551443;
+            var now = new Date(year, month - 1, day, 20, 35, 0);
+            var new_moon = new Date(1970, 0, 7, 20, 35, 0);
+            var phase = ((now.getTime() - new_moon.getTime()) / 1000) % lp;
+            return phase / lp;
+        }
+
+        /**
+         * @return {number} They all return a single value - the phase day (0 to 1, where 0=new moon, 0.5=full etc.) for the selected date.
+         */
+        function getCurrentMoonPhase() {
+            var now = new Date();
+            return getMoonPhase(now.getFullYear(), now.getMonth() + 1, now.getDate());
+        }
+
+        function getMoonIcon(phase) {
+            var iconInterval = 1 / moonIcons.length;
+
+            return moonIcons[Math.floor(phase / iconInterval)];
         }
 
         var temp = null;
@@ -291,6 +321,37 @@
         var forecastsCells = null;
 
         var forecastCount = 4;
+
+        var moonIcons = [
+            "wi-moon-alt-new",
+            "wi-moon-alt-waxing-crescent-1",
+            "wi-moon-alt-waxing-crescent-2",
+            "wi-moon-alt-waxing-crescent-3",
+            "wi-moon-alt-waxing-crescent-4",
+            "wi-moon-alt-waxing-crescent-5",
+            "wi-moon-alt-waxing-crescent-6",
+            "wi-moon-alt-first-quarter",
+            "wi-moon-alt-waxing-gibbous-1",
+            "wi-moon-alt-waxing-gibbous-2",
+            "wi-moon-alt-waxing-gibbous-3",
+            "wi-moon-alt-waxing-gibbous-4",
+            "wi-moon-alt-waxing-gibbous-5",
+            "wi-moon-alt-waxing-gibbous-6",
+            "wi-moon-alt-full",
+            "wi-moon-alt-waning-gibbous-1",
+            "wi-moon-alt-waning-gibbous-2",
+            "wi-moon-alt-waning-gibbous-3",
+            "wi-moon-alt-waning-gibbous-4",
+            "wi-moon-alt-waning-gibbous-5",
+            "wi-moon-alt-waning-gibbous-6",
+            "wi-moon-alt-third-quarter",
+            "wi-moon-alt-waning-crescent-1",
+            "wi-moon-alt-waning-crescent-2",
+            "wi-moon-alt-waning-crescent-3",
+            "wi-moon-alt-waning-crescent-4",
+            "wi-moon-alt-waning-crescent-5",
+            "wi-moon-alt-waning-crescent-6",
+        ];
 
         // Config parameters.
         var api_params, api_appId, api_lang, api_units, api_locParams;
