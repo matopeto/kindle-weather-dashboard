@@ -2,11 +2,11 @@
 
 Simple webpage with weahter informations.
 * tested on **Kindle 3/4/5 only** and **Paperwhite 3**, *maybe works on other kindles*,
-* only **portrait mode** (for now)
+* **portrait and landscape mode**
 * configurable place, units, language
 * features:
  * **current weather and temperature**
- * **forecast for next 12 hours**
+ * **forecast for next 12 hours**, in landscape mode for **15 hours**
  * **sunrise and sunset**
  * **Moon phase**
 

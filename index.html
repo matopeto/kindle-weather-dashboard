@@ -23,11 +23,11 @@
         }
 
         #city {
-            font-size: 40px;
-            font-size: 5.7rem;
+            font-size: 50px;
+            font-size: 7rem;
             position: absolute;
             top: 1.5%;
-            left: 3.3%;
+            right: 3.3%;
         }
 
         #temp {
@@ -112,20 +112,90 @@
             font-size: 14.2rem;
         }
 
-        #temp1, #temp2, #temp3, #temp4 {
+        #temp1, #temp2, #temp3, #temp4, #temp5 {
             font-size: 50px;
             font-size: 7.1rem;
         }
 
-        #time1, #time2, #time3, #time4 {
+        #time1, #time2, #time3, #time4, #time5 {
             font-size: 35px;
             font-size: 5rem;
             margin-top: 5%;
         }
 
-        #desc1, #desc2, #desc3, #desc4 {
+        #desc1, #desc2, #desc3, #desc4, #desc5 {
             font-size: 20px;
             font-size: 2.8rem;
+        }
+
+        @media all and (orientation: portrait) {
+            .col:nth-last-child(2) {
+                border-right: none;
+            }
+
+            .col5 {
+                display: none;
+            }
+        }
+
+        @media all and (orientation: landscape) {
+            #city {
+                font-size: 35.4px;
+                font-size: 7rem;
+            }
+
+            #temp {
+                font-size: 141.7px;
+                font-size: 28rem;
+            }
+
+            #lastUpdate {
+                font-size: 7.1px;
+                font-size: 1.4rem;
+            }
+
+            #description {
+                font-size: 35.4px;
+                font-size: 7rem;
+            }
+
+            #icon {
+                font-size: 177.1px;
+                font-size: 35rem;
+            }
+            #date {
+                font-size: 21.8px;
+                font-size: 4.3rem;
+            }
+
+            #sun {
+                font-size: 21.8px;
+                font-size: 4.3rem;
+            }
+
+            .forecastIconWrapper {
+                font-size: 71.9px;
+                font-size: 14.2rem;
+            }
+
+            #temp1, #temp2, #temp3, #temp4, #temp5 {
+                font-size: 35.9px;
+                font-size: 7.1rem;
+            }
+
+            #time1, #time2, #time3, #time4, #time5 {
+                font-size: 25.3px;
+                font-size: 5rem;
+            }
+
+            #desc1, #desc2, #desc3, #desc4, #desc5 {
+                font-size: 14.2px;
+                font-size: 2.8rem;
+            }
+
+            .col {
+                width: 19.5%;
+            }
         }
     </style>
 
@@ -320,7 +390,7 @@
 
         var forecastsCells = null;
 
-        var forecastCount = 4;
+        var forecastCount = 5;
 
         var moonIcons = [
             "wi-moon-alt-new",
@@ -385,11 +455,11 @@
 
         window.addEventListener("resize", function() {
             setRem("resize");
-        })
+        });
 
         // Simulating vh an vw with rem: http://stackoverflow.com/questions/13948713/is-there-any-cross-browser-javascript-for-making-vh-and-vw-units-work
         // But kindle 4 doesn't support rem (so all sizes are fixed fallback for kindle 4)
-        // Kindle 4 viewport: 600x706 (in window.load event, window.resize event is not called)
+        // Kindle 4 viewport: 600x706 (landscape 800x506) (in window.load event, window.resize event is not called)
         // Paperwhite 3 viewport: 1072x1268 (in window.load event it is 0x0, in window.resized
         function viewport() {
             var e = window, a = 'inner';
@@ -447,6 +517,12 @@
             <div class="forecastIconWrapper"><i id="icon4"></i></div>
             <div id="temp4"></div>
             <div id="desc4"></div>
+        </div>
+        <div class="col col5">
+            <div id="time5"></div>
+            <div class="forecastIconWrapper"><i id="icon5"></i></div>
+            <div id="temp5"></div>
+            <div id="desc5"></div>
         </div>
     </div>
     <div id="date"></div>
