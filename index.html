@@ -128,74 +128,70 @@
             font-size: 2.8rem;
         }
 
-        @media all and (orientation: portrait) {
-            .col:nth-last-child(2) {
-                border-right: none;
-            }
-
-            .col5 {
-                display: none;
-            }
+        .portrait .col:nth-last-child(2) {
+            border-right: none;
         }
 
-        @media all and (orientation: landscape) {
-            #city {
-                font-size: 35.4px;
-                font-size: 7rem;
-            }
+        .portrait .col5 {
+            display: none;
+        }
 
-            #temp {
-                font-size: 141.7px;
-                font-size: 28rem;
-            }
+        .landscape #city {
+            font-size: 35.4px;
+            font-size: 7rem;
+        }
 
-            #lastUpdate {
-                font-size: 7.1px;
-                font-size: 1.4rem;
-            }
+        .landscape #temp {
+            font-size: 141.7px;
+            font-size: 28rem;
+        }
 
-            #description {
-                font-size: 35.4px;
-                font-size: 7rem;
-            }
+        .landscape #lastUpdate {
+            font-size: 7.1px;
+            font-size: 1.4rem;
+        }
 
-            #icon {
-                font-size: 177.1px;
-                font-size: 35rem;
-            }
-            #date {
-                font-size: 21.8px;
-                font-size: 4.3rem;
-            }
+        .landscape #description {
+            font-size: 35.4px;
+            font-size: 7rem;
+        }
 
-            #sun {
-                font-size: 21.8px;
-                font-size: 4.3rem;
-            }
+        .landscape #icon {
+            font-size: 177.1px;
+            font-size: 35rem;
+        }
+        .landscape #date {
+            font-size: 21.8px;
+            font-size: 4.3rem;
+        }
 
-            .forecastIconWrapper {
-                font-size: 71.9px;
-                font-size: 14.2rem;
-            }
+        .landscape #sun {
+            font-size: 21.8px;
+            font-size: 4.3rem;
+        }
 
-            #temp1, #temp2, #temp3, #temp4, #temp5 {
-                font-size: 35.9px;
-                font-size: 7.1rem;
-            }
+        .landscape .forecastIconWrapper {
+            font-size: 71.9px;
+            font-size: 14.2rem;
+        }
 
-            #time1, #time2, #time3, #time4, #time5 {
-                font-size: 25.3px;
-                font-size: 5rem;
-            }
+        .landscape #temp1, .landscape #temp2, .landscape #temp3, .landscape #temp4, .landscape #temp5 {
+            font-size: 35.9px;
+            font-size: 7.1rem;
+        }
 
-            #desc1, #desc2, #desc3, #desc4, #desc5 {
-                font-size: 14.2px;
-                font-size: 2.8rem;
-            }
+        .landscape #time1, .landscape #time2, .landscape #time3, .landscape #time4, .landscape #time5 {
+            font-size: 25.3px;
+            font-size: 5rem;
+        }
 
-            .col {
-                width: 19.5%;
-            }
+        .landscape #desc1, .landscape #desc2, .landscape #desc3, .landscape #desc4, .landscape #desc5 {
+            font-size: 14.2px;
+            font-size: 2.8rem;
+        }
+
+        .landscape .col {
+            width: 19.5%;
         }
     </style>
 
@@ -380,6 +376,7 @@
             return moonIcons[Math.floor(phase / iconInterval)];
         }
 
+        var page = null;
         var temp = null;
         var icon = null;
         var city = null;
@@ -391,6 +388,7 @@
         var forecastsCells = null;
 
         var forecastCount = 5;
+        var forcedRotation = false;
 
         var moonIcons = [
             "wi-moon-alt-new",
@@ -424,11 +422,74 @@
         ];
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation;
+
+        function rotate() {
+            var rot = getUrlParameter("rotation") !== null ? getUrlParameter("rotation") : rotation;
+
+            var v = viewport();
+            var isPortrait = v.height > v.width;
+
+            if (isPortrait && rot === "ll") {
+                // landscape left
+                page.className = "landscape";
+                forcedRotation = true;
+
+                page.style.transform = "rotate(90deg)";
+                page.style.transformOrigin = "bottom left";
+                page.style.webkitTransform = "rotate(90deg)";
+                page.style.webkitTransformOrigin = "bottom left";
+                page.style.position = "absolute";
+                page.style.top = -v.width + "px";
+
+                page.style.height = v.width + "px";
+                page.style.width = v.height + "px";
+            } else if (isPortrait && rot === "lr") {
+                // landscape right
+                page.className = "landscape";
+                forcedRotation = true;
+
+                page.style.transform = "rotate(-90deg)";
+                page.style.transformOrigin = "bottom right";
+                page.style.webkitTransform = "rotate(-90deg)";
+                page.style.webkitTransformOrigin = "top left";
+                page.style.position = "absolute";
+                page.style.top = v.height + "px";
+
+                page.style.height = v.width + "px";
+                page.style.width = v.height + "px";
+            } else if (rot === "up") {
+                // upside down
+                page.className = isPortrait ? "portrait" : "landscape";
+                forcedRotation = false;
+
+                page.style.transform = "rotate(180deg)";
+                page.style.transformOrigin = "50% 50% 0";
+                page.style.webkitTransform = "rotate(180deg)";
+                page.style.webkitTransformOrigin = "50% 50% 0";
+            } else {
+                // reset css:
+                page.className = isPortrait ? "portrait" : "landscape";
+                forcedRotation = false;
+
+                page.style.transform = "";
+                page.style.transformOrigin = "";
+                page.style.webkitTransform = "";
+                page.style.webkitTransformOrigin = "";
+                page.style.position = "";
+                page.style.top = "";
+                page.style.background = "";
+
+                page.style.height = "";
+                page.style.width = "";
+            }
+        }
 
         window.addEventListener('load', function () {
             console.log("load");
             moment.locale("sk");
+
+            page = document.getElementById("page");
             temp = document.getElementById("temp");
             icon = document.getElementById("icon");
 
@@ -450,10 +511,12 @@
 
             refreshData();
 
+            rotate();
             setRem("load");
         });
 
         window.addEventListener("resize", function() {
+            rotate();
             setRem("resize");
         });
 
@@ -473,7 +536,7 @@
         function setRem(prefix) {
             var v = viewport();
             var root = document.querySelector(":root");
-            root.style.fontSize = (v.height / 100) + "px";
+            root.style.fontSize = ((forcedRotation === false ? v.height : v.width) / 100) + "px";
            // console.log("setting root font size to: " + v.height)
           //  alert(prefix + " viewport:" + v.width + "x" + v.height);
         }

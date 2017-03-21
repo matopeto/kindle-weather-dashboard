@@ -3,6 +3,7 @@
 Simple webpage with weahter informations.
 * tested on **Kindle 3/4/5, Paperwhite 3, iPad Air**, *maybe works on other kindles and devices*,
 * **portrait and landscape mode**
+* **landscape mode on Paperwhite!!** see configuration
 * configurable place, units, language
 * features:
   * **current weather and temperature**
@@ -34,6 +35,7 @@ create config.js file from config.js.sample and set variables:
 * `api_lang` - output language (e.g. `en`)
 * `api_units` - units (e.g. `metric`, `imperial`)
 * or you can set all parameters with `api_params` varialble (e.g. `q=Prague&appid=YOUR_API_KEY&lang=sk&units=metric`
+ * `rotation` - set rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape and `up` for upside down
  
 See more: http://openweathermap.org/current and http://openweathermap.org/forecast5
 
@@ -42,6 +44,7 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 * `city` sets city, (e.g. `city=Paris`)
 * `lat`, `lon` sets location (e.g. `lat=50&lon=14`)
 * `lang` and `units` for lang and units :)
+* `rotation` sets the rotation :)
 
 Examples:
 * Dashboard for Prague, metrics slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`
@@ -54,6 +57,8 @@ http://kindle.hrincar.eu/weather/
 http://kindle.hrincar.eu/weather/?city=Brno
 
 http://kindle.hrincar.eu/weather/?lat=50&lon=14&lang=en
+
+http://kindle.hrincar.eu/weather/?lat=50&lon=14&lang=en&rotation=ll
 
 
 ## Screenshots
