@@ -276,7 +276,7 @@
                 var forecast = data.list[i];
 
                 forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
-                forecastsCells[i].icon.className = "wi wi-owm-" + forecast.weather[0].id;
+                forecastsCells[i].icon.className = "wi wi-owm-" + (forecast.weather[0].icon.slice(-1) === "n" ? "night-" : "") + forecast.weather[0].id;
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = moment(new Date(forecast.dt * 1000)).format("LT");
             }
@@ -333,7 +333,7 @@
         };
 
         function processActualWeather(data) {
-            icon.className = "wi wi-owm-" + data.weather[0].id;
+            icon.className = "wi wi-owm-" + (data.weather[0].icon.slice(-1) === "n" ? "night-" : "") + data.weather[0].id;
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
