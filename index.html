@@ -16,6 +16,11 @@
             font-size: 0;
         }
 
+        html.night {
+            color: #ffffff;
+            background: #000000;
+        }
+
         #page {
             position: relative;
             height: 100%;
@@ -79,12 +84,20 @@
             height: 39%;
         }
 
+        .night .forecast {
+            border-color: #ffffff;
+        }
+
         .col {
             width: 24.5%;
             border-right: 1px solid black;
             float: left;
             text-align: center;
             height: 100%;
+        }
+
+        .night .col {
+            border-color: #ffffff;
         }
 
         .col:last-child {
@@ -230,7 +243,7 @@
                             script.onload = null;
                             document.body.removeChild(script);
                             script = null;
-                        }
+                        };
 
                         document.body.appendChild(script);
                     } catch (exception) {
@@ -267,6 +280,7 @@
         function refreshData() {
             refreshActualWeather();
             refreshForecastWeather();
+            setNightMode();
 
             window.setTimeout("refreshData()", 30 * 60 * 1000);
         }
@@ -340,9 +354,17 @@
             lastUpdate.innerHTML = moment(new Date()).format("LT") + "/" + moment(new Date(data.dt * 1000)).format("LT");
 
             date.innerHTML = moment(new Date()).format("dd, ll");
+            
+            var sunrise = moment(new Date(data.sys.sunrise * 1000));
+            var sunset = moment(new Date(data.sys.sunset * 1000));
+            
+            _sunriseHour = sunrise.hour();
+            _sunsetHour = sunset.hour();
 
-            sun.innerHTML = "<i class='wi " + getMoonIcon(getCurrentMoonPhase()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i>" + moment(new Date(data.sys.sunrise * 1000)).format("LT")
-                    + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + moment(new Date(data.sys.sunset * 1000)).format("LT");
+            setNightMode();
+
+            sun.innerHTML = "<i class='wi " + getMoonIcon(getCurrentMoonPhase()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i>" + sunrise.format("LT")
+                    + "&nbsp;&nbsp;<i class='wi wi-sunset'></i>" + sunset.format("LT");
             //  alert(data.name);
         }
 
@@ -422,7 +444,11 @@
         ];
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode;
+
+        // For night mode.
+        var _sunsetHour = 18;
+        var _sunriseHour = 6;
 
         function rotate() {
             var rot = getUrlParameter("rotation") !== null ? getUrlParameter("rotation") : rotation;
@@ -513,6 +539,7 @@
 
             rotate();
             setRem("load");
+            setNightMode();
         });
 
         window.addEventListener("resize", function() {
@@ -539,6 +566,46 @@
             root.style.fontSize = ((forcedRotation === false ? v.height : v.width) / 100) + "px";
            // console.log("setting root font size to: " + v.height)
           //  alert(prefix + " viewport:" + v.width + "x" + v.height);
+        }
+
+        function setNightMode() {
+            var root = document.querySelector(":root");
+            if (isNightMode()) {
+                root.className = "night";
+            } else {
+                root.className = null;
+            }
+        }
+
+        function isNightMode() {
+            if (night_mode === "on") {
+                return true;
+            }
+
+            if (night_mode === "auto") {
+                return isNight(_sunsetHour, _sunriseHour);
+            }
+
+            var found = night_mode && night_mode.match(/([0-9][0-9]?)-([0-9][0-9]?)/);
+
+            if (found) {
+                return isNight(found[1], found[2]);
+            }
+
+            return false;
+        }
+
+        function isNight(f, t) {
+            var from = parseInt(f);
+            var to = parseInt(t);
+
+            var now = moment().hour();
+
+            if (from > to) {
+                return from <= now || to > now;
+            } else {
+                return from <= now && to > now;
+            }
         }
 
     </script>

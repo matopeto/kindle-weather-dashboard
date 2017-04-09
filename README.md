@@ -5,6 +5,7 @@ Simple webpage with weahter informations.
 * **portrait and landscape mode**
 * **landscape mode on Paperwhite!!** see configuration
 * configurable place, units, language
+* night mode
 * features:
   * **current weather and temperature**
   * **forecast for next 12 hours**, in landscape mode for **15 hours**
@@ -35,8 +36,9 @@ create config.js file from config.js.sample and set variables:
 * `api_lang` - output language (e.g. `en`)
 * `api_units` - units (e.g. `metric`, `imperial`)
 * or you can set all parameters with `api_params` varialble (e.g. `q=Prague&appid=YOUR_API_KEY&lang=sk&units=metric`
- * `rotation` - set rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape and `up` for upside down
- 
+* `rotation` - set rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape and `up` for upside down
+* `night_mode` - `auto` - by sunrise and sunset, `on` - always on, `HH-HH` (`22-06`) interval from-to, `off` or `null` for disabling.
+
 See more: http://openweathermap.org/current and http://openweathermap.org/forecast5
 
 ### with url query parameters
