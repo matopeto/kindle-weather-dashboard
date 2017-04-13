@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kindle Weather Dashboard Config</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        body {
+            margin: 10px;
+        }
+
+        form div {
+            margin: 10px 0;
+        }
+
+        input[name=city] {
+            width: 90%;
+            padding: 10px;
+        }
+
+        input[name=lat], input[name=lon] {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+<h1>Kindle Weather Dashboard<br/>Config Page</h1>
+<form action="index.html">
+    <div>
+        <label>City: <br/><input type="text" name="city" /></label>
+    </div>
+    <div>Or GPS:</div>
+    <div>
+        <label>Lat (e.g. 50.123): <input type="text" name="lat" /></label>
+        <label>Lon (e.g. 14.4): <input type="text" name="lon" /></label>
+    </div>
+    <div>
+        <label>Language: <br/>
+            <select name="lang">
+                <option value="sk">Slovensky</option>
+                <option value="en">English</option>
+                <option value="cs">Česky</option>
+                <option value="de">Deutsch</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>Rotation: <br/>
+            <select name="rotation">
+                <option value="none">None</option>
+                <option value="ll">Landscape Left</option>
+                <option value="lr">Landscape right</option>
+                <option value="up">Upside down</option>
+                <option value="">default</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>Units: <br/>
+            <select name="units">
+                <option value="metric">Metric - °C</option>
+                <option value="imperial">Imperial - Fahrenheit</option>
+                <option value="">default</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>Night Mode: <br/>
+            <select name="night">
+                <option value="off">off</option>
+                <option value="auto">sunset - sunrise</option>
+                <option value="on">always</option>
+                <option value="">default</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>OWM appid (leave it blank for default): <br/><input type="text" name="appId"/></label>
+    </div>
+    <div>
+        <input type="submit" value="Show Dashboard"/>
+    </div>
+</form>
+<div>Source ane more info: <a href="https://github.com/matopeto/kindle-weather-dashboard">https://github.com/matopeto/kindle-weather-dashboard</a></div>
+</body>
+</html>

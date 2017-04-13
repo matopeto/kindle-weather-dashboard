@@ -264,14 +264,14 @@
 
 
         function refreshActualWeather() {
-            jsonp.request("http://api.openweathermap.org/data/2.5/weather?" + getApiParams() + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+            jsonp.request("http://api.openweathermap.org/data/2.5/weather?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processActualWeather(data);
                 }, "actual");
         }
 
         function refreshForecastWeather() {
-            jsonp.request("http://api.openweathermap.org/data/2.5/forecast?" + getApiParams() + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+            jsonp.request("http://api.openweathermap.org/data/2.5/forecast?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processForecastWeather(data);
                 }, "forecast");
@@ -305,15 +305,19 @@
                 return api_params;
             }
 
-            var appId = getUrlParameter("appId") !== null ? getUrlParameter("appId") : api_appId;
-            var lang = getUrlParameter("lang") !== null ? getUrlParameter("lang") : api_lang;
-            var units = getUrlParameter("units") !== null ? getUrlParameter("units") : api_units;
+            var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
+            var lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
+            var units = getUrlParameter("units") ? getUrlParameter("units") : api_units;
 
             var locParams = api_locParams;
-            if (getUrlParameter("city") !== null) {
+            if (getUrlParameter("city")) {
                 locParams = "q=" + encodeURIComponent(getUrlParameter("city"));
-            } else if (getUrlParameter("lat") !== null && getUrlParameter("lon") !== null) {
+            } else if (getUrlParameter("lat") && getUrlParameter("lon")) {
                 locParams = "lat=" + encodeURIComponent(getUrlParameter("lat")) + "&lon=" + encodeURIComponent(getUrlParameter("lon"));
+            }
+
+            if (!locParams || !appId) {
+                return null;
             }
 
             var url = "";
@@ -450,8 +454,10 @@
         var _sunsetHour = 18;
         var _sunriseHour = 6;
 
+        var _apiParams = null;
+
         function rotate() {
-            var rot = getUrlParameter("rotation") !== null ? getUrlParameter("rotation") : rotation;
+            var rot = getUrlParameter("rotation") ? getUrlParameter("rotation") : rotation;
 
             var v = viewport();
             var isPortrait = v.height > v.width;
@@ -514,6 +520,11 @@
         window.addEventListener('load', function () {
             console.log("load");
             moment.locale("sk");
+
+            _apiParams = getApiParams();
+            if (_apiParams === null) {
+                window.location = "config.html";
+            }
 
             page = document.getElementById("page");
             temp = document.getElementById("temp");
@@ -578,15 +589,16 @@
         }
 
         function isNightMode() {
-            if (night_mode === "on") {
+            var mode = getUrlParameter("night") ? getUrlParameter("night") : night_mode;
+            if (mode === "on") {
                 return true;
             }
 
-            if (night_mode === "auto") {
+            if (mode === "auto") {
                 return isNight(_sunsetHour, _sunriseHour);
             }
 
-            var found = night_mode && night_mode.match(/([0-9][0-9]?)-([0-9][0-9]?)/);
+            var found = mode && mode.match(/([0-9][0-9]?)-([0-9][0-9]?)/);
 
             if (found) {
                 return isNight(found[1], found[2]);
