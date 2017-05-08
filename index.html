@@ -352,7 +352,7 @@
         };
 
         function processActualWeather(data) {
-            icon.className = "wi wi-owm-" + (data.weather[0].icon.slice(-1) === "n" ? "night-" : "") + data.weather[0].id;
+            icon.className = "wi wi-owm-" + (data.weather[0].icon.slice(-1) === "n" ? "night-" : "day-") + data.weather[0].id;
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
