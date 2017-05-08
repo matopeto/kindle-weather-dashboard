@@ -7,6 +7,7 @@
     <script src="vendor/moment-with-locales.js" type="text/javascript"></script>
     <script src="config.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="css/weather-icons.css"/>
+    <link rel="stylesheet" type="text/css" href="css/custom-icons.css"/>
     <style type="text/css">
         html, body {
             height: 100%;
@@ -290,7 +291,7 @@
                 var forecast = data.list[i];
 
                 forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
-                forecastsCells[i].icon.className = "wi wi-owm-" + (forecast.weather[0].icon.slice(-1) === "n" ? "night-" : "") + forecast.weather[0].id;
+                forecastsCells[i].icon.className = "wi wi-owm-" + (forecast.weather[0].icon.slice(-1) === "n" ? "night-" : "day-") + forecast.weather[0].id;
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = moment(new Date(forecast.dt * 1000)).format("LT");
             }
