@@ -84,7 +84,7 @@
             refreshForecastWeather();
             setNightMode();
 
-            window.setTimeout("refreshData()", 30 * 60 * 1000);
+            window.setTimeout("refreshData()", refreshTime);
         }
 
         function processForecastWeather(data) {
@@ -251,13 +251,17 @@
         ];
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime;
 
         // For night mode.
         var _sunsetHour = 18;
         var _sunriseHour = 6;
 
         var _apiParams = null;
+
+        if (!refreshTime) {
+            refreshTime = 30 * 60 * 1000;
+        }
 
         function rotate() {
             var rot = getUrlParameter("rotation") ? getUrlParameter("rotation") : rotation;

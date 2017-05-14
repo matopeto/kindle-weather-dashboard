@@ -38,6 +38,7 @@ create config.js file from config.js.sample and set variables:
 * or you can set all parameters with `api_params` varialble (e.g. `q=Prague&appid=YOUR_API_KEY&lang=sk&units=metric`
 * `rotation` - set rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape and `up` for upside down
 * `night_mode` - `auto` - by sunrise and sunset, `on` - always on, `HH-HH` (`22-06`) interval from-to, `off` or `null` for disabling.
+* `refreshTime` - refresh rate in miliseconds (default is 30 minutes)
 
 See more: http://openweathermap.org/current and http://openweathermap.org/forecast5
 
