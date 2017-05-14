@@ -22,6 +22,15 @@
             background: #000000;
         }
 
+        #cleaner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: none;
+        }
+
         #page {
             position: relative;
             height: 100%;
@@ -403,6 +412,7 @@
             return moonIcons[Math.floor(phase / iconInterval)];
         }
 
+        var cleaner = null;
         var page = null;
         var temp = null;
         var icon = null;
@@ -527,6 +537,8 @@
                 window.location = "config.html";
             }
 
+            cleaner = document.getElementById("cleaner");
+
             page = document.getElementById("page");
             temp = document.getElementById("temp");
             icon = document.getElementById("icon");
@@ -552,6 +564,15 @@
             rotate();
             setRem("load");
             setNightMode();
+
+            // Set Cleanup for 4am
+            var now = new Date();
+            var cleanTime = (new Date()).setHours(4,0,0);
+            var diff = cleanTime - now;
+            if (diff < 0) {
+                diff += 86400000;
+            }
+            window.setTimeout("clearScreen()", diff);
         });
 
         window.addEventListener("resize", function() {
@@ -621,6 +642,24 @@
             }
         }
 
+        function clearScreen(times) {
+            if (typeof(times) == 'undefined') {
+                times = 5;
+            }
+
+            if (times <= 0) {
+                cleaner.style.display = 'none';
+                window.setTimeout("clearScreen()", 86400000);
+                return;
+            }
+
+            cleaner.style.display = 'block';
+            cleaner.style.background = times % 2 == 0 ? "#ffffff" : "#000000";
+            window.setTimeout(function () {
+                clearScreen(times - 1);
+            }, 500);
+        }
+
     </script>
 
 </head>
@@ -671,5 +710,6 @@
     <div id="date"></div>
     <div id="sun"></div>
 </div>
+<div id="cleaner"></div>
 </body>
 </html>
