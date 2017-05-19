@@ -92,10 +92,22 @@
                 var forecast = data.list[i];
 
                 forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
-                forecastsCells[i].icon.className = "wi wi-owm-" + (forecast.weather[0].icon.slice(-1) === "n" ? "night-" : "day-") + forecast.weather[0].id;
+                forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = moment(new Date(forecast.dt * 1000)).format("LT");
             }
+        }
+
+        function getIconClassName(weather, date) {
+            var isNight = weather.icon.slice(-1) === "n";
+            if (isNight && weather.id == 800) {
+                // Night clear -> real moon phase icon.
+                var phase = getMoonPhaseFromDate(date);
+                var icon = getMoonIcon(phase);
+                return "wi " + icon;
+            }
+
+            return "wi wi-owm-" + (isNight ? "night-" : "day-") + weather.id;
         }
 
         function getApiParams() {
@@ -153,7 +165,7 @@
         };
 
         function processActualWeather(data) {
-            icon.className = "wi wi-owm-" + (data.weather[0].icon.slice(-1) === "n" ? "night-" : "day-") + data.weather[0].id;
+            icon.className = getIconClassName(data.weather[0], new Date(data.dt * 1000));
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
@@ -187,6 +199,13 @@
             var now = new Date(year, month - 1, day, 20, 35, 0);
             var new_moon = new Date(1970, 0, 7, 20, 35, 0);
             var phase = ((now.getTime() - new_moon.getTime()) / 1000) % lp;
+            return phase / lp;
+        }
+
+        function getMoonPhaseFromDate(date) {
+            var lp = 2551443;
+            var new_moon = new Date(1970, 0, 7, 20, 35, 0);
+            var phase = ((date.getTime() - new_moon.getTime()) / 1000) % lp;
             return phase / lp;
         }
 
