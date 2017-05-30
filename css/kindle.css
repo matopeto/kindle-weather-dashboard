@@ -124,18 +124,18 @@ html.night {
     font-size: 14.2rem;
 }
 
-#temp1, #temp2, #temp3, #temp4, #temp5 {
+.colTemp {
     font-size: 50px;
     font-size: 7.1rem;
 }
 
-#time1, #time2, #time3, #time4, #time5 {
+.colTime {
     font-size: 35px;
     font-size: 5rem;
     margin-top: 5%;
 }
 
-#desc1, #desc2, #desc3, #desc4, #desc5 {
+.colDesc {
     font-size: 20px;
     font-size: 2.8rem;
 }
@@ -187,17 +187,17 @@ html.night {
     font-size: 14.2rem;
 }
 
-.landscape #temp1, .landscape #temp2, .landscape #temp3, .landscape #temp4, .landscape #temp5 {
+.landscape .colTemp {
     font-size: 35.9px;
     font-size: 7.1rem;
 }
 
-.landscape #time1, .landscape #time2, .landscape #time3, .landscape #time4, .landscape #time5 {
+.landscape .colTime {
     font-size: 25.3px;
     font-size: 5rem;
 }
 
-.landscape #desc1, .landscape #desc2, .landscape #desc3, .landscape #desc4, .landscape #desc5 {
+.landscape .colDesc {
     font-size: 14.2px;
     font-size: 2.8rem;
 }
