@@ -1,19 +1,31 @@
 # kindle-weather-dashboard
 
 Simple webpage with weahter informations.
-* tested on **Kindle 3/4/5, Paperwhite 3, iPad Air**, *maybe works on other kindles and devices*,
+
+# Try it!
+
+Go to: http://kindle.hrincar.eu/weather/ and that's it!
+
+or you can install it at own server and customize.
+
+## Features
+
+* **current weather and temperature**
+* **forecast for next 12 hours**, in landscape mode for **15 hours**
+* **sunrise and sunset**
+* **Moon phase**
+
+## Options
+
 * **portrait and landscape mode**
 * **landscape mode on Paperwhite!!** see configuration
 * configurable place, units, language
-* night mode
-* features:
-  * **current weather and temperature**
-  * **forecast for next 12 hours**, in landscape mode for **15 hours**
-  * **sunrise and sunset**
-  * **Moon phase**
+* automatic night mode
+* tested on **Kindle 3/4/5, Paperwhite 3, iPad Air**, *maybe works on other kindles and devices*,
 
-* Weather and forecast source: https://openweathermap.org/
-* Icons source: https://github.com/erikflowers/weather-icons
+Weather and forecast source: https://openweathermap.org/
+
+Icons source: https://github.com/erikflowers/weather-icons
 
 <img src="real_devices.jpg" width="300" alt="Dashboard on real devices" />
 
@@ -52,17 +64,6 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 Examples:
 * Dashboard for Prague, metrics slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`
 * Dashboard for given gps, metric, default language: `https://YOUR_URL/?lat=50&lon=14&units=metric&appId=YOUR_API_KEY`
-
-## Try it (on my server):
-
-http://kindle.hrincar.eu/weather/
-
-http://kindle.hrincar.eu/weather/?city=Brno
-
-http://kindle.hrincar.eu/weather/?lat=50&lon=14&lang=en
-
-http://kindle.hrincar.eu/weather/?lat=50&lon=14&lang=en&rotation=ll
-
 
 ## Screenshots
 
