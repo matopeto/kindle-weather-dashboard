@@ -6,6 +6,16 @@ html, body {
     font-size: 0;
 }
 
+a {
+    color: #000000;
+    background: #ffffff;
+}
+
+.night a {
+    color: #ffffff;
+    background: #000000;
+}
+
 html.night {
     color: #ffffff;
     background: #000000;
@@ -32,6 +42,8 @@ html.night {
     position: absolute;
     top: 1.5%;
     right: 3.3%;
+    display: block;
+    text-decoration: none;
 }
 
 #temp {

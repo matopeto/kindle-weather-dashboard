@@ -120,7 +120,7 @@
             }
 
             var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
-            var lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
+            lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
             var units = getUrlParameter("units") ? getUrlParameter("units") : api_units;
 
             var locParams = api_locParams;
@@ -232,6 +232,7 @@
         var lastUpdate = null;
         var date = null;
         var sun = null;
+        var lang = null;
 
         var forecastsCells = null;
 
@@ -352,6 +353,10 @@
                 window.location = "config.html";
             }
 
+            if (lang) {
+                moment.locale(lang);
+            }
+
             cleaner = document.getElementById("cleaner");
 
             page = document.getElementById("page");
@@ -359,6 +364,11 @@
             icon = document.getElementById("icon");
 
             city = document.getElementById("city");
+            city.addEventListener('click', function (event) {
+                event.preventDefault();
+                window.location.href = window.location.href.replace("/index.html", "/config.html");
+                return false
+            });
             description = document.getElementById("description");
             lastUpdate = document.getElementById("lastUpdate");
             date = document.getElementById("date");
@@ -482,7 +492,7 @@
 
 <body>
 <div id="page">
-    <div id="city"></div>
+    <a id="city" href="./config.html"></a>
     <div id="iconWrapper"><i id="icon"></i></div>
     <div class="tempWrapper">
         <div id="temp"></div>

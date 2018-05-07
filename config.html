@@ -29,16 +29,16 @@
 <h1>Kindle Weather Dashboard<br/>Config Page</h1>
 <form action="index.html">
     <div>
-        <label>City: <br/><input type="text" name="city" /></label>
+        <label>City: <br/><input type="text" name="city" id="city" /></label>
     </div>
     <div>Or GPS:</div>
     <div>
-        <label>Lat (e.g. 50.123): <input type="text" name="lat" /></label>
-        <label>Lon (e.g. 14.4): <input type="text" name="lon" /></label>
+        <label>Lat (e.g. 50.123): <input type="text" name="lat" id="lat" /></label>
+        <label>Lon (e.g. 14.4): <input type="text" name="lon" id="lon" /></label>
     </div>
     <div>
         <label>Language: <br/>
-            <select name="lang">
+            <select name="lang" id="lang">
                 <option value="sk">Slovensky</option>
                 <option value="en">English</option>
                 <option value="cs">Česky</option>
@@ -48,7 +48,7 @@
     </div>
     <div>
         <label>Rotation: <br/>
-            <select name="rotation">
+            <select name="rotation" id="rotation">
                 <option value="none">None</option>
                 <option value="ll">Landscape Left</option>
                 <option value="lr">Landscape right</option>
@@ -59,7 +59,7 @@
     </div>
     <div>
         <label>Units: <br/>
-            <select name="units">
+            <select name="units" id="units">
                 <option value="metric">Metric - °C</option>
                 <option value="imperial">Imperial - Fahrenheit</option>
                 <option value="">default</option>
@@ -68,7 +68,7 @@
     </div>
     <div>
         <label>Night Mode: <br/>
-            <select name="night">
+            <select name="night" id="night">
                 <option value="off">off</option>
                 <option value="auto">sunset - sunrise</option>
                 <option value="on">always</option>
@@ -77,12 +77,45 @@
         </label>
     </div>
     <div>
-        <label>OWM appid (leave it blank for default): <br/><input type="text" name="appId"/></label>
+        <label>OWM appid (leave it blank for default): <br/><input type="text" name="appId" id="appId"/></label>
     </div>
     <div>
         <input type="submit" value="Show Dashboard"/>
     </div>
 </form>
 <div>Source ane more info: <a href="https://github.com/matopeto/kindle-weather-dashboard">https://github.com/matopeto/kindle-weather-dashboard</a></div>
+<script type="application/javascript">
+    var params={};
+    window.location.search
+        .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+                params[key] = value;
+            }
+        );
+
+    if (params["city"]) {
+        document.getElementById("city").value = params["city"];
+    }
+    if (params["lat"]) {
+        document.getElementById("lat").value = params["lat"];
+    }
+    if (params["lon"]) {
+        document.getElementById("lon").value = params["lon"];
+    }
+    if (params["lang"]) {
+        document.getElementById("lang").value = params["lang"];
+    }
+    if (params["rotation"]) {
+        document.getElementById("rotation").value = params["rotation"];
+    }
+    if (params["units"]) {
+        document.getElementById("units").value = params["units"];
+    }
+    if (params["night"]) {
+        document.getElementById("night").value = params["night"];
+    }
+    if (params["appId"]) {
+        document.getElementById("appId").value = params["appId"];
+    }
+</script>
 </body>
 </html>
