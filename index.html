@@ -94,7 +94,7 @@
                 forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
-                forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format("LT");
+                forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
             }
         }
 
@@ -169,7 +169,7 @@
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
-            lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format("LT") + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format("LT");
+            lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
 
             date.innerHTML = momentWithCorrectUtcOffset(new Date()).format("dd, ll");
             
@@ -181,8 +181,8 @@
 
             setNightMode();
 
-            sun.innerHTML = "<i class='wi " + getMoonIcon(getCurrentMoonPhase()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i> " + sunrise.format("LT")
-                    + "&nbsp;&nbsp;<i class='wi wi-sunset'></i> " + sunset.format("LT");
+            sun.innerHTML = "<i class='wi " + getMoonIcon(getCurrentMoonPhase()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i> " + sunrise.format(timeFormat)
+                    + "&nbsp;&nbsp;<i class='wi wi-sunset'></i> " + sunset.format(timeFormat);
             //  alert(data.name);
         }
 
@@ -269,6 +269,8 @@
             "wi-moon-alt-waning-crescent-5",
             "wi-moon-alt-waning-crescent-6",
         ];
+
+        var timeFormat = "HH:mm";
 
         // Config parameters.
         var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset;
