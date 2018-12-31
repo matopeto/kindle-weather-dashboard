@@ -58,6 +58,37 @@
         </label>
     </div>
     <div>
+        <label>UTC offset: (kindle doesn't report correct local time to the kindle (always it is GMT/UTC). If times on dashboard are bad, you can set custom offset, like 1, 2, -3 etc. You may need to set it again after winter/summer time change.)<br/>
+            <select name="utcOffset" id="utcOffset">
+                <option value="">default</option>
+                <option value="+01:00">1h</option>
+                <option value="-01:00">-1h</option>
+                <option value="+02:00">2h</option>
+                <option value="-02:00">-2h</option>
+                <option value="+03:00">3h</option>
+                <option value="-03:00">-3h</option>
+                <option value="+04:00">4h</option>
+                <option value="-04:00">-4h</option>
+                <option value="+05:00">5h</option>
+                <option value="-05:00">-5h</option>
+                <option value="+06:00">6h</option>
+                <option value="-06:00">-6h</option>
+                <option value="+07:00">7h</option>
+                <option value="-07:00">-7h</option>
+                <option value="+08:00">8h</option>
+                <option value="-08:00">-8h</option>
+                <option value="+09:00">9h</option>
+                <option value="-09:00">-9h</option>
+                <option value="+10:00">10h</option>
+                <option value="-10:00">-10h</option>
+                <option value="+11:00">11h</option>
+                <option value="-11:00">-11h</option>
+                <option value="+12:00">12h</option>
+                <option value="-12:00">-12h</option>
+            </select>
+        </label>
+    </div>
+    <div>
         <label>Units: <br/>
             <select name="units" id="units">
                 <option value="metric">Metric - °C</option>
@@ -88,7 +119,7 @@
     var params={};
     window.location.search
         .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
-                params[key] = value;
+                params[key] = decodeURIComponent(value);
             }
         );
 
@@ -115,6 +146,9 @@
     }
     if (params["appId"]) {
         document.getElementById("appId").value = params["appId"];
+    }
+    if (params["utcOffset"]) {
+        document.getElementById("utcOffset").value = params["utcOffset"];
     }
 </script>
 </body>

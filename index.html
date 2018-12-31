@@ -94,7 +94,7 @@
                 forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
-                forecastsCells[i].time.innerHTML = moment(new Date(forecast.dt * 1000)).format("LT");
+                forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format("LT");
             }
         }
 
@@ -169,12 +169,12 @@
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
-            lastUpdate.innerHTML = moment(new Date()).format("LT") + "/" + moment(new Date(data.dt * 1000)).format("LT");
+            lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format("LT") + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format("LT");
 
-            date.innerHTML = moment(new Date()).format("dd, ll");
+            date.innerHTML = momentWithCorrectUtcOffset(new Date()).format("dd, ll");
             
-            var sunrise = moment(new Date(data.sys.sunrise * 1000));
-            var sunset = moment(new Date(data.sys.sunset * 1000));
+            var sunrise = momentWithCorrectUtcOffset(new Date(data.sys.sunrise * 1000));
+            var sunset = momentWithCorrectUtcOffset(new Date(data.sys.sunset * 1000));
             
             _sunriseHour = sunrise.hour();
             _sunsetHour = sunset.hour();
@@ -271,7 +271,9 @@
         ];
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset;
+
+        utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
 
         // For night mode.
         var _sunsetHour = 18;
@@ -458,7 +460,7 @@
             var from = parseInt(f);
             var to = parseInt(t);
 
-            var now = moment().hour();
+            var now = momentWithCorrectUtcOffset().hour();
 
             if (from > to) {
                 return from <= now || to > now;
@@ -483,6 +485,14 @@
             window.setTimeout(function () {
                 clearScreen(times - 1);
             }, 500);
+        }
+
+        function momentWithCorrectUtcOffset(dateTime) {
+            if (typeof(utcOffset) != 'undefined' && utcOffset != null) {
+                return moment(dateTime).utcOffset(utcOffset, false);
+            } else {
+               return moment(dateTime);
+            }
         }
 
     </script>
