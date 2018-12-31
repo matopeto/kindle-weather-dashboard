@@ -91,7 +91,7 @@
             for (var i = 0; i < forecastCount; i++) {
                 var forecast = data.list[i];
 
-                forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + "<i class='wi wi-celsius'></i>";
+                forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + unitsSymbolHtml;
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
@@ -110,13 +110,32 @@
             return "wi wi-owm-" + (isNight ? "night-" : "day-") + weather.id;
         }
 
+        function setsUnitsSymbolFromApiUrl(url) {
+            if (url.indexOf("units=metric") >= 0) {
+                unitsSymbolHtml = "<i class='wi wi-celsius'></i>";
+                return
+            }
+
+            if (url.indexOf("units=imperial") >= 0) {
+                unitsSymbolHtml = "<i class='wi wi-fahrenheit'></i>";
+                return
+            }
+
+            unitsSymbolHtml = "<span>K</span>";
+            return
+        }
+
         function getApiParams() {
             if (getUrlParameter("api_params")) {
-                return getUrlParameter("api_params");
+                var url = getUrlParameter("api_params");
+                setsUnitsSymbolFromApiUrl(url)
+                return url;
             }
 
             if (api_params) {
-                return api_params;
+                var url = api_params;
+                setsUnitsSymbolFromApiUrl(url)
+                return url;
             }
 
             var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
@@ -148,6 +167,7 @@
                 url += "&units=" + units;
             }
 
+            setsUnitsSymbolFromApiUrl(url)
             return url;
         }
 
@@ -238,6 +258,8 @@
 
         var forecastCount = 5;
         var forcedRotation = false;
+
+        var unitsSymbolHtml = "";
 
         var moonIcons = [
             "wi-moon-alt-new",
