@@ -72,6 +72,7 @@ html.night {
     bottom: 46%;
     font-size: 50px;
     font-size: 7rem;
+    text-align: right;
 }
 
 #icon {
@@ -105,6 +106,7 @@ html.night {
     float: left;
     text-align: center;
     height: 100%;
+    overflow: hidden;
 }
 
 .night .col {
