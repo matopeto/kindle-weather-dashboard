@@ -17,7 +17,7 @@ var refreshTime = 30 * 60 * 1000;
 // "auto" - by sunrise and sunset,
 // "HH-HH - like: ""22-06", from 22:00 to 06:00
 // "on" - night mode all the day :)
-var nigh_mode = "off";
+var night_mode = "off";
 
 // Timezone offset - kindle doesnt report correct local time to the kindle (always it is GMT),
 // You can set custom GMT offset, in format "+08:00".
