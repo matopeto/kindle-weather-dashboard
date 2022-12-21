@@ -88,6 +88,8 @@
         }
 
         function processForecastWeather(data) {
+            dataTimeZone = data.city.timezone
+
             for (var i = 0; i < forecastCount; i++) {
                 var forecast = data.list[i];
 
@@ -185,6 +187,8 @@
         };
 
         function processActualWeather(data) {
+            dataTimeZone = data.timezone
+
             icon.className = getIconClassName(data.weather[0], new Date(data.dt * 1000));
             temp.innerHTML = Math.round(data.main.temp);
             city.innerHTML = data.name;
@@ -192,10 +196,10 @@
             lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
 
             date.innerHTML = momentWithCorrectUtcOffset(new Date()).format("dd, ll");
-            
+
             var sunrise = momentWithCorrectUtcOffset(new Date(data.sys.sunrise * 1000));
             var sunset = momentWithCorrectUtcOffset(new Date(data.sys.sunset * 1000));
-            
+
             _sunriseHour = sunrise.hour();
             _sunsetHour = sunset.hour();
 
@@ -298,6 +302,8 @@
         var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset;
 
         utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
+
+        var dataTimeZone = 0;
 
         // For night mode.
         var _sunsetHour = 18;
@@ -484,7 +490,7 @@
             var from = parseInt(f);
             var to = parseInt(t);
 
-            var now = momentWithCorrectUtcOffset().hour();
+            var now = momentWithCorrectUtcOffset(new Date()).hour();
 
             if (from > to) {
                 return from <= now || to > now;
@@ -512,10 +518,13 @@
         }
 
         function momentWithCorrectUtcOffset(dateTime) {
-            if (typeof(utcOffset) != 'undefined' && utcOffset != null) {
-                return moment(dateTime).utcOffset(utcOffset, false);
+            // Default is auto
+            if (typeof(utcOffset) === 'undefined' || utcOffset === null || utcOffset === "") {
+                return moment(dateTime).utcOffset(dataTimeZone / 60, false)
+            } else if (utcOffset === 'local') {
+                return moment(dateTime);
             } else {
-               return moment(dateTime);
+                return moment(dateTime).utcOffset(utcOffset, false);
             }
         }
 

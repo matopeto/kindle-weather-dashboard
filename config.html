@@ -39,7 +39,8 @@
     <div>
         <label>UTC offset: (kindle paperwhite (and maybe some others) doesn't report correct local time to the kindle (always it is GMT/UTC). If times on dashboard are bad, you can set custom offset, like 1, 2, -3 etc. You may need to set it again after winter/summer time change.)<br/>
             <select name="utcOffset" id="utcOffset">
-                <option value="">default</option>
+                <option value="">default - auto by city or location</option>
+                <option value="local">local - reported by kindle/browser</option>
                 <option value="+01:00">+1 h</option>
                 <option value="-01:00">-1 h</option>
                 <option value="+02:00">+2 h</option>
