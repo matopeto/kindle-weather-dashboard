@@ -102,6 +102,15 @@
         </label>
     </div>
     <div>
+        <label>Show: <br/>
+            <select name="tempType" id="tempType">
+                <option value="actual">Actual temperature</option>
+                <option value="feelsLike">Feels like temperature</option>
+                <option value="">default</option>
+            </select>
+        </label>
+    </div>
+    <div>
         <label>Night Mode: <br/>
             <select name="night" id="night">
                 <option value="off">off</option>
@@ -153,6 +162,9 @@
     }
     if (params["utcOffset"]) {
         document.getElementById("utcOffset").value = params["utcOffset"];
+    }
+    if (params["tempType"]) {
+        document.getElementById("tempType").value = params["tempType"];
     }
 </script>
 </body>

@@ -93,7 +93,7 @@
             for (var i = 0; i < forecastCount; i++) {
                 var forecast = data.list[i];
 
-                forecastsCells[i].temp.innerHTML = Math.round(forecast.main.temp) + unitsSymbolHtml;
+                forecastsCells[i].temp.innerHTML = tempType == "feelsLike" ? Math.round(forecast.main.feels_like) : Math.round(forecast.main.temp) + unitsSymbolHtml;
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
@@ -190,7 +190,7 @@
             dataTimeZone = data.timezone
 
             icon.className = getIconClassName(data.weather[0], new Date(data.dt * 1000));
-            temp.innerHTML = Math.round(data.main.temp);
+            temp.innerHTML = tempType == "feelsLike" ? Math.round(data.main.feels_like) : Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
             lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
@@ -299,9 +299,10 @@
         var timeFormat = "HH:mm";
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType;
 
         utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
+        tempType = getUrlParameter("tempType") ? getUrlParameter("tempType") : tempType;
 
         var dataTimeZone = 0;
 

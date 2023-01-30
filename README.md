@@ -51,7 +51,8 @@ create config.js file from config.js.sample and set variables:
 * `rotation` - set rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape and `up` for upside down
 * `night_mode` - `auto` - by sunrise and sunset, `on` - always on, `HH-HH` (`22-06`) interval from-to, `off` or `null` for disabling.
 * `refreshTime` - refresh rate in miliseconds (default is 30 minutes)
-* `utcOffset` - custom UTC offset. (Because kindle doesn't report correct local time. You may need to change the value after winter/summer time changed)
+* `utcOffset` - `auto` - determined by location, or custom UTC offset. (Because kindle doesn't report correct local time. You may need to change the value after winter/summer time changed)
+* `tempType` - use `feelsLike` to shows feels like temperatures
 
 See more: http://openweathermap.org/current and http://openweathermap.org/forecast5
 
@@ -62,6 +63,7 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 * `lang` and `units` for lang and units :)
 * `rotation` sets the rotation :)
 * `utcOffset` sets utc offset
+* `tempType` sets temperature type (actual or feels like)
 
 Examples:
 * Dashboard for Prague, metrics slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`
