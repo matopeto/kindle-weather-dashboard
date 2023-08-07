@@ -35,7 +35,7 @@ Icons source: https://github.com/erikflowers/weather-icons
 3. upload to your server, or simply create local (e.g with php: `php -S 192.168.0.1:80 -t .`)
 4. disable screensaver on your Kindle:
   * press search button (or keyboard button on Kindle 4) on homescreen and type: `;debugOn` and press enter on keyboard
-  * press search button (or keyboard button on Kindle 4) again and type: `~disableScreensaver` and press enter on keyboard. (On kindle Paperwhite type: `~ds`
+  * press search button (or keyboard button on Kindle 4) again and type: `~disableScreensaver` and press enter on keyboard. (On kindle Paperwhite type: `~ds` - with new firmware may by not possible but see this [instructions](https://github.com/matopeto/kindle-weather-dashboard/issues/16) for solution)
 5. launch your browser and go to url of your server
 6. Dashboard don't need connection to your server (you can shutdown local server now) Dashboard calls api directly.
 
