@@ -107,8 +107,8 @@
             if (isNight && weather.id == 800) {
                 // Night clear -> real moon phase icon.
                 var phase = getMoonPhaseFromDate(date);
-                var icon = getMoonIcon(phase, isNightMode());
-                return "moonIcon wi " + icon;
+                var icon = getMoonIconClasses(phase, isNightMode());
+                return icon;
             }
 
             return "wi wi-owm-" + (isNight ? "night-" : "day-") + weather.id;
@@ -205,7 +205,7 @@
             _sunriseHour = sunrise.hour();
             _sunsetHour = sunset.hour();
 
-            sun.innerHTML = "<i class='moonIcon wi " + getMoonIcon(getCurrentMoonPhase(), isNightMode()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i> " + sunrise.format(timeFormat)
+            sun.innerHTML = "<i class='" + getMoonIconClasses(getCurrentMoonPhase(), isNightMode()) + "'></i>&nbsp;&nbsp;<i class='wi wi-sunrise'></i> " + sunrise.format(timeFormat)
                     + "&nbsp;&nbsp;<i class='wi wi-sunset'></i> " + sunset.format(timeFormat);
             //  alert(data.name);
             setNightMode();
@@ -243,19 +243,20 @@
             return getMoonPhase(now.getFullYear(), now.getMonth() + 1, now.getDate());
         }
 
-        function getMoonIcon(phase, isNightMode) {
+        function getMoonIconClasses(phase, isNightMode) {
             var iconInterval = 1 / moonIcons.length;
             var index = Math.floor(phase / iconInterval)
 
-            return moonIcons[index][isNightMode ? 1 : 0];
+            return "wi " + moonIcons[index][isNightMode ? 1 : 0] + " moonIcon " + (phase < 0.5 ? "moonFirstHalf" : "moonSecondHalf");
         }
 
         function setMoonIconsRotation(latitude) {
             var rotation = (latitude - 90)
-            var transform = "rotate(" + rotation + "deg)"
             var elements = document.getElementsByClassName("moonIcon")
 
             for (var i = 0; i < elements.length; i++) {
+                var direction = elements[i].className.indexOf("moonFirstHalf") !== -1 ? -1 : 1 
+                var transform = "rotate(" + (rotation * direction) + "deg)"
                 elements[i].style.transform = transform;
                 elements[i].style.webkitTransform = transform;
             }
