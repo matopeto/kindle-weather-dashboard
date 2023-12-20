@@ -97,6 +97,8 @@
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
+                forecastsCells[i].icon.style.transform = null;
+                forecastsCells[i].icon.style.webkitTransform = null;
             }
 
             setMoonIconsRotation(data.city.coord.lat)
@@ -192,6 +194,8 @@
             dataTimeZone = data.timezone
 
             icon.className = getIconClassName(data.weather[0], new Date(data.dt * 1000));
+            icon.style.transform = null;
+            icon.style.webkitTransform = null;
             temp.innerHTML = tempType == "feelsLike" ? Math.round(data.main.feels_like) : Math.round(data.main.temp);
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
