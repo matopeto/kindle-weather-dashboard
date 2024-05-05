@@ -219,3 +219,7 @@ html.night {
 .landscape .col {
     width: 19.5%;
 }
+
+.feelsLike, .feelsLike * {
+    font-style: italic;
+}

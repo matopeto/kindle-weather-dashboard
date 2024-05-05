@@ -93,10 +93,13 @@
             for (var i = 0; i < forecastCount; i++) {
                 var forecast = data.list[i];
 
-                forecastsCells[i].temp.innerHTML = tempType == "feelsLike" ? Math.round(forecast.main.feels_like) : Math.round(forecast.main.temp) + unitsSymbolHtml;
+                var feelsLike = tempType == "feelsLike";
+
+                forecastsCells[i].temp.innerHTML = (feelsLike ? Math.round(forecast.main.feels_like) : Math.round(forecast.main.temp)) + unitsSymbolHtml;
                 forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
                 forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
                 forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
+                forecastsCells[i].temp.className = feelsLike ? "colTemp feelsLike" : "colTemp";
                 forecastsCells[i].icon.style.transform = null;
                 forecastsCells[i].icon.style.webkitTransform = null;
             }
@@ -193,10 +196,12 @@
         function processActualWeather(data) {
             dataTimeZone = data.timezone
 
+            var feelsLike = tempType == "feelsLike";
             icon.className = getIconClassName(data.weather[0], new Date(data.dt * 1000));
             icon.style.transform = null;
             icon.style.webkitTransform = null;
-            temp.innerHTML = tempType == "feelsLike" ? Math.round(data.main.feels_like) : Math.round(data.main.temp);
+            temp.innerHTML = feelsLike ? Math.round(data.main.feels_like) : Math.round(data.main.temp);
+            temp.className = feelsLike ? "feelsLike" : "";
             city.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
             lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
@@ -420,6 +425,13 @@
             city.addEventListener('click', function (event) {
                 event.preventDefault();
                 window.location.href = window.location.href.replace("/index.html", "/config.html");
+                return false
+            });
+            temp.addEventListener('click', function (event) {
+                event.preventDefault();
+                var newHref = window.location.href.replace(/[&?]tempType=[^&]*/, "");
+                newHref = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + "tempType=" + (tempType === "feelsLike" ? "actual" : "feelsLike")
+                window.location.href = newHref
                 return false
             });
             description = document.getElementById("description");
