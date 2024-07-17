@@ -149,6 +149,9 @@
 
             var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
             lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
+            if (typeof(lang) === 'string') {
+                lang = lang.split(";", 1)
+            }
             var units = getUrlParameter("units") ? getUrlParameter("units") : api_units;
 
             var locParams = api_locParams;
@@ -404,16 +407,13 @@
 
         window.addEventListener('load', function () {
             console.log("load");
-            moment.locale("sk");
 
             _apiParams = getApiParams();
             if (_apiParams === null) {
                 window.location = "config.html";
             }
 
-            if (lang) {
-                moment.locale(lang);
-            }
+            moment.locale(momentLocale());
 
             cleaner = document.getElementById("cleaner");
 
@@ -529,6 +529,16 @@
                 return from <= now || to > now;
             } else {
                 return from <= now && to > now;
+            }
+        }
+
+        function momentLocale() {
+            var lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
+            if (typeof(lang) === 'string') {
+                var langs = lang.split(";", 2)
+                return langs.length > 1 ? langs[1] : langs[0];
+            } else {
+                return null;
             }
         }
 
