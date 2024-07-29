@@ -8,6 +8,8 @@ Go to: http://kindle.hrincar.eu/weather/ and that's it!
 
 or you can install it at own server and customize.
 
+_Please, if you use this website, generate your free OWM token (see: https://openweathermap.org/api for more info), because the default token can be blocked and changed at any time and the weather forecast can stop working._
+
 ## Features
 
 * **current weather and temperature**
