@@ -135,23 +135,45 @@ html.night {
 
 .forecastIconWrapper {
     font-size: 100px;
-    font-size: 14.2rem;
+    font-size: 10rem;
+    line-height: 1;
+    padding-bottom: 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 0.25em;
+    padding-top: 0.2em;
 }
 
 .colTemp {
     font-size: 50px;
-    font-size: 7.1rem;
+    font-size: 7rem;
+    line-height: 1;
 }
 
 .colTime {
     font-size: 35px;
     font-size: 5rem;
+    line-height: 1;
     margin-top: 5%;
+    margin-top: 1rem;
+    margin-top: 1vh;
+    margin-bottom: 2rem;
+    margin-bottom: 2vh;
+    margin-bottom: 0.4em;
+    margin-top: 0.2em;
 }
 
 .colDesc {
     font-size: 20px;
-    font-size: 2.8rem;
+    font-size: 3rem;
+    line-height: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 6rem;
+    height: 2em;
+    margin-top: 2rem;
+    margin-top: 0.66em;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .portrait .col:nth-last-child(2) {
@@ -198,22 +220,26 @@ html.night {
 
 .landscape .forecastIconWrapper {
     font-size: 71.9px;
-    font-size: 14.2rem;
+    font-size: 10rem;
+    line-height: 1;
 }
 
 .landscape .colTemp {
     font-size: 35.9px;
-    font-size: 7.1rem;
+    font-size: 7rem;
+    line-height: 1;
 }
 
 .landscape .colTime {
     font-size: 25.3px;
     font-size: 5rem;
+    line-height: 1;
 }
 
 .landscape .colDesc {
     font-size: 14.2px;
-    font-size: 2.8rem;
+    font-size: 3rem;
+    line-height: 1;
 }
 
 .landscape .col {
