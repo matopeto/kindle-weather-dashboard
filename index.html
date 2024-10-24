@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="css/kindle.css"/>
 
     <script type="text/javascript">
+        var apiProtocol = window.location.protocol === 'file:' ? 'https:' : window.location.protocol;
+
         var jsonp = function () {
             return {
                 // JSONP Request
@@ -66,14 +68,14 @@
 
 
         function refreshActualWeather() {
-            jsonp.request("//api.openweathermap.org/data/2.5/weather?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+            jsonp.request(apiProtocol + "//api.openweathermap.org/data/2.5/weather?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processActualWeather(data);
                 }, "actual");
         }
 
         function refreshForecastWeather() {
-            jsonp.request("//api.openweathermap.org/data/2.5/forecast?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+            jsonp.request(apiProtocol + "//api.openweathermap.org/data/2.5/forecast?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processForecastWeather(data);
                 }, "forecast");
