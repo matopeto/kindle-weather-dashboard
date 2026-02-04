@@ -333,6 +333,7 @@
 
         utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
         tempType = getUrlParameter("tempType") ? getUrlParameter("tempType") : tempType;
+        refreshTime = getUrlParameter("refreshTime") ? getUrlParameter("refreshTime") * 60 * 1000 : refreshTime;
 
         var dataTimeZone = 0;
 

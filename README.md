@@ -66,6 +66,7 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 * `rotation` sets the rotation :)
 * `utcOffset` sets UTC offset
 * `tempType` sets temperature type (actual or feels like)
+* `refreshTime` sets refresh interval in minutes (default: 30)
 
 Examples:
 * Dashboard for Prague, metric units, Slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`

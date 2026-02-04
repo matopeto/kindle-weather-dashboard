@@ -163,6 +163,9 @@
         </label>
     </div>
     <div>
+        <label>Refresh time (leave it blank for default): <br/><input type="text" name="refreshTime" id="refreshTime"/></label>
+    </div>
+    <div>
         <label>OWM appid (leave it blank for default): <br/><input type="text" name="appId" id="appId"/></label>
     </div>
     <div>
@@ -207,6 +210,9 @@
     }
     if (params["tempType"]) {
         document.getElementById("tempType").value = params["tempType"];
+    }
+    if (params["refreshTime"]) {
+        document.getElementById("refreshTime").value = params["refreshTime"];
     }
 </script>
 </body>
