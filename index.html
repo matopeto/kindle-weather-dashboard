@@ -86,7 +86,9 @@
             refreshActualWeather();
             refreshForecastWeather();
 
-            window.setTimeout("refreshData()", refreshTime);
+            if (!rtcSleepMode) {
+                window.setTimeout("refreshData()", refreshTime);
+            }
         }
 
         function processForecastWeather(data) {
@@ -329,11 +331,14 @@
         var timeFormat = "HH:mm";
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType, rtcSleepMode, rtcWakeDelay;
 
         utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
         tempType = getUrlParameter("tempType") ? getUrlParameter("tempType") : tempType;
-        refreshTime = getUrlParameter("refreshTime") ? getUrlParameter("refreshTime") * 60 * 1000 : refreshTime;
+        refreshTime = getUrlParameter("refreshTime") ? getUrlParameter("refreshTime") * 60 * 1000 : refreshTime; // URL: minutes, config.js: milliseconds
+        rtcSleepMode = getUrlParameter("rtcSleepMode") ? getUrlParameter("rtcSleepMode") === "true" : !!rtcSleepMode;
+        rtcWakeDelay = getUrlParameter("rtcWakeDelay") ? getUrlParameter("rtcWakeDelay") * 1000 : rtcWakeDelay; // URL: seconds, config.js: milliseconds
+        
 
         var dataTimeZone = 0;
 
@@ -344,7 +349,10 @@
         var _apiParams = null;
 
         if (!refreshTime) {
-            refreshTime = 30 * 60 * 1000;
+            refreshTime = 30 * 60 * 1000; // default 30 minutes
+        }
+        if (!rtcWakeDelay) {
+            rtcWakeDelay = 15 * 1000; // default 15 seconds
         }
 
         function rotate() {
@@ -453,6 +461,24 @@
             }
 
             refreshData();
+
+            // RTC sleep mode: single mechanism handles both sleep-wake and regular interval
+            if (rtcSleepMode) {
+                var lastRefresh = new Date().getTime();
+                var wakeDelayActive = false;
+                setInterval(function() {
+                    var now = new Date().getTime();
+                    var sinceRefresh = now - lastRefresh;
+                    if (sinceRefresh > refreshTime && !wakeDelayActive) {
+                        wakeDelayActive = true;
+                        setTimeout(function() {
+                            lastRefresh = new Date().getTime();
+                            refreshData();
+                            wakeDelayActive = false;
+                        }, rtcWakeDelay);
+                    }
+                }, 1000);
+            }
 
             rotate();
             setRem("load");
