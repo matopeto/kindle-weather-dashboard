@@ -153,6 +153,15 @@
         </label>
     </div>
     <div>
+        <label>Forecast: <br/>
+            <select name="forecastType" id="forecastType">
+                <option value="hour">Hourly (3h steps)</option>
+                <option value="daily">Daily</option>
+                <option value="">default</option>
+            </select>
+        </label>
+    </div>
+    <div>
         <label>Night Mode: <br/>
             <select name="night" id="night">
                 <option value="off">off</option>
@@ -172,7 +181,7 @@
         <input type="submit" value="Show Dashboard"/>
     </div>
 </form>
-<div>Source ane more info: <a href="https://github.com/matopeto/kindle-weather-dashboard">https://github.com/matopeto/kindle-weather-dashboard</a></div>
+<div>Source ane more info: <a href="https://github.com/matopeto/kindle-weather-dashboard" target="_blank" rel="noopener">https://github.com/matopeto/kindle-weather-dashboard</a></div>
 <script type="application/javascript">
     var params={};
     window.location.search
@@ -181,37 +190,40 @@
             }
         );
 
-    if (params["city"]) {
+    if (params["city"] != undefined) {
         document.getElementById("city").value = params["city"];
     }
-    if (params["lat"]) {
+    if (params["lat"] != undefined) {
         document.getElementById("lat").value = params["lat"];
     }
-    if (params["lon"]) {
+    if (params["lon"] != undefined) {
         document.getElementById("lon").value = params["lon"];
     }
-    if (params["lang"]) {
+    if (params["lang"] != undefined) {
         document.getElementById("lang").value = params["lang"];
     }
-    if (params["rotation"]) {
+    if (params["rotation"] != undefined) {
         document.getElementById("rotation").value = params["rotation"];
     }
-    if (params["units"]) {
+    if (params["units"] != undefined) {
         document.getElementById("units").value = params["units"];
     }
-    if (params["night"]) {
+    if (params["night"] != undefined) {
         document.getElementById("night").value = params["night"];
     }
-    if (params["appId"]) {
+    if (params["appId"] != undefined) {
         document.getElementById("appId").value = params["appId"];
     }
-    if (params["utcOffset"]) {
+    if (params["utcOffset"] != undefined) {
         document.getElementById("utcOffset").value = params["utcOffset"];
     }
-    if (params["tempType"]) {
+    if (params["tempType"] != undefined) {
         document.getElementById("tempType").value = params["tempType"];
     }
-    if (params["refreshTime"]) {
+    if (params["forecastType"] != undefined) {
+        document.getElementById("forecastType").value = params["forecastType"];
+    }
+    if (params["refreshTime"] != undefined) {
         document.getElementById("refreshTime").value = params["refreshTime"];
     }
 </script>

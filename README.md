@@ -13,7 +13,7 @@ _Please, if you use this website, generate your free OWM token (see: https://ope
 ## Features
 
 * **current weather and temperature**
-* **forecast for the next 12 hours**, in landscape mode for **15 hours**
+* **forecast: hourly every 3 hours (next 12 hours, landscape mode for 15 hours) or daily for 4/5 days**
 * **sunrise and sunset**
 * **Moon phase**
 
@@ -54,9 +54,10 @@ create a config.js file from config.js.sample and set variables:
 * `night_mode` - `auto` - based on sunrise and sunset, `on` - always on, `HH-HH` (`22-06`) interval for on/off, `off` or `null` to disable
 * `refreshTime` - refresh rate in milliseconds (default is 30 minutes)
 * `utcOffset` - if not set, it is determined by location, `local` - local machine UTC offset, or custom UTC offset. (Because Kindle doesn't report the correct local time. You may need to change the value after the winter/summer time change)
-* `tempType` - use `feelsLike` to show feels-like temperatures
+* `tempType` - use `feelsLike` for current weather and hourly forecast; daily forecast uses actual min/max temps
+* `forecastType` - `hour` for 3-hour steps (default) or `daily` for daily forecast
 
-See more: http://openweathermap.org/current and http://openweathermap.org/forecast5
+See more: http://openweathermap.org/current, http://openweathermap.org/forecast and http://openweathermap.org/forecast16
 
 ### with url query parameters
 * `appId` sets the appId
@@ -66,6 +67,7 @@ See more: http://openweathermap.org/current and http://openweathermap.org/foreca
 * `rotation` sets the rotation :)
 * `utcOffset` sets UTC offset
 * `tempType` sets temperature type (actual or feels like)
+* `forecastType` sets forecast type (`hour` or `daily`)
 * `refreshTime` sets refresh interval in minutes (default: 30)
 
 Examples:
@@ -82,4 +84,3 @@ Examples:
 
 ### Real devices
 <img src="real_devices.jpg" width="300" alt="Dashboard on real devices" />
-

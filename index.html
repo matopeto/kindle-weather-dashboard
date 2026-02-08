@@ -71,14 +71,20 @@
             jsonp.request(apiProtocol + "//api.openweathermap.org/data/2.5/weather?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processActualWeather(data);
-                }, "actual");
+                }, "actualScript");
         }
 
         function refreshForecastWeather() {
-            jsonp.request(apiProtocol + "//api.openweathermap.org/data/2.5/forecast?" + _apiParams + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
+            var forecastPath = forecastType === "daily" ? "forecast/daily" : "forecast";
+            var url = apiProtocol + "//api.openweathermap.org/data/2.5/" + forecastPath + "?" + _apiParams;
+            if (forecastType === "daily") {
+                url += "&cnt=" + forecastCount;
+            }
+
+            jsonp.request(url + "&callback=jsonp.response" + "&_timestamp=" + (new Date()).getTime()
                 , function (data) {
                     processForecastWeather(data);
-                }, "forecast");
+                }, "forecastScript");
         }
 
         function refreshData() {
@@ -94,16 +100,27 @@
         function processForecastWeather(data) {
             dataTimeZone = data.city.timezone
 
-            for (var i = 0; i < forecastCount; i++) {
+            var count = Math.min(forecastCount, data.list.length);
+            for (var i = 0; i < count; i++) {
                 var forecast = data.list[i];
 
-                var feelsLike = tempType == "feelsLike";
+                if (forecastType === "daily") {
+                    var minTemp = Math.round(forecast.temp.min);
+                    var maxTemp = Math.round(forecast.temp.max);
+                    forecastsCells[i].temp.innerHTML = minTemp + "/" + maxTemp + unitsSymbolHtml;
+                    forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
+                    forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
+                    forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format("ddd");
+                    forecastsCells[i].temp.className = "colTemp";
+                } else {
+                    var feelsLike = tempType == "feelsLike";
+                    forecastsCells[i].temp.innerHTML = (feelsLike ? Math.round(forecast.main.feels_like) : Math.round(forecast.main.temp)) + unitsSymbolHtml;
+                    forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
+                    forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
+                    forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
+                    forecastsCells[i].temp.className = feelsLike ? "colTemp feelsLike" : "colTemp";
+                }
 
-                forecastsCells[i].temp.innerHTML = (feelsLike ? Math.round(forecast.main.feels_like) : Math.round(forecast.main.temp)) + unitsSymbolHtml;
-                forecastsCells[i].icon.className = getIconClassName(forecast.weather[0], new Date(forecast.dt * 1000));
-                forecastsCells[i].desc.innerHTML = forecast.weather[0].description;
-                forecastsCells[i].time.innerHTML = momentWithCorrectUtcOffset(new Date(forecast.dt * 1000)).format(timeFormat);
-                forecastsCells[i].temp.className = feelsLike ? "colTemp feelsLike" : "colTemp";
                 forecastsCells[i].icon.style.transform = null;
                 forecastsCells[i].icon.style.webkitTransform = null;
             }
@@ -331,10 +348,11 @@
         var timeFormat = "HH:mm";
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType, rtcSleepMode, rtcWakeDelay;
+        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType, forecastType, rtcSleepMode, rtcWakeDelay;
 
         utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
         tempType = getUrlParameter("tempType") ? getUrlParameter("tempType") : tempType;
+        forecastType = getUrlParameter("forecastType") ? getUrlParameter("forecastType") : forecastType;
         refreshTime = getUrlParameter("refreshTime") ? getUrlParameter("refreshTime") * 60 * 1000 : refreshTime; // URL: minutes, config.js: milliseconds
         rtcSleepMode = getUrlParameter("rtcSleepMode") ? getUrlParameter("rtcSleepMode") === "true" : !!rtcSleepMode;
         rtcWakeDelay = getUrlParameter("rtcWakeDelay") ? getUrlParameter("rtcWakeDelay") * 1000 : rtcWakeDelay; // URL: seconds, config.js: milliseconds
@@ -353,6 +371,9 @@
         }
         if (!rtcWakeDelay) {
             rtcWakeDelay = 15 * 1000; // default 15 seconds
+        }
+        if (!forecastType) {
+            forecastType = "hour";
         }
 
         function rotate() {
@@ -444,6 +465,14 @@
                 newHref = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + "tempType=" + (tempType === "feelsLike" ? "actual" : "feelsLike")
                 window.location.href = newHref
                 return false
+            });
+            var forecastContainer = document.getElementById("forecast");
+            forecastContainer.addEventListener('click', function (event) {
+                event.preventDefault();
+                var newHref = window.location.href.replace(/[&?]forecastType=[^&]*/, "");
+                newHref = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + "forecastType=" + (forecastType === "daily" ? "hour" : "daily");
+                window.location.href = newHref;
+                return false;
             });
             description = document.getElementById("description");
             lastUpdate = document.getElementById("lastUpdate");
@@ -615,7 +644,7 @@
     </div>
     <div id="description"></div>
     <div id="lastUpdate"></div>
-    <div class="forecast">
+    <div class="forecast" id="forecast">
         <div class="col col1">
             <div id="time1" class="colTime"></div>
             <div class="forecastIconWrapper"><i id="icon1" class="colIcon"></i></div>
