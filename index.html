@@ -88,6 +88,9 @@
         }
 
         function refreshData() {
+            if (debug) {
+                _debugRefreshCount++;
+            }
             setNightMode();
             refreshActualWeather();
             refreshForecastWeather();
@@ -95,6 +98,27 @@
             if (!rtcSleepMode) {
                 window.setTimeout("refreshData()", refreshInterval * 60 * 1000);
             }
+        }
+
+        function buildUrl(baseUrl, params) {
+            var url = baseUrl || window.location.href;
+            var urlParts = url.split('?');
+            var base = urlParts[0];
+            var query = urlParts[1] || '';
+
+            // Add debug params
+            if (debug) {
+                params.debugStart = _debugStartTime.valueOf();
+                params.debugRC = _debugRefreshCount;
+            }
+
+            // One loop: remove existing param and append new value
+            for (var key in params) {
+                query = query.replace(new RegExp('(^|&)' + RegExp.escape(key) + '=[^&]*&?', 'g'), '$1').replace(/&$/, '');
+                query += (query ? '&' : '') + key + '=' + encodeURIComponent(params[key]);
+            }
+
+            return base + (query ? '?' + query : '');
         }
 
         function processForecastWeather(data) {
@@ -249,6 +273,10 @@
             description.innerHTML = data.weather[0].description;
             lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
 
+            if (debug) {
+                lastUpdate.innerHTML += " | #" + _debugRefreshCount + ", " + _debugStartTime.fromNow(true);
+            }
+
             date.innerHTML = momentWithCorrectUtcOffset(new Date()).format("dd, ll");
 
             var sunrise = momentWithCorrectUtcOffset(new Date(data.sys.sunrise * 1000));
@@ -366,7 +394,7 @@
         var timeFormat = "HH:mm";
 
         // Config parameters.
-        var city, lat, lon, appId, lang, units, nightMode, rotation, refreshInterval, utcOffset, tempType, forecastType, rtcSleepMode, rtcWakeDelay;
+        var city, lat, lon, appId, lang, units, nightMode, rotation, refreshInterval, utcOffset, tempType, forecastType, rtcSleepMode, rtcWakeDelay, debug;
 
         city = getUrlStringParameter("city", city);
         lat = getUrlStringParameter("lat", lat);
@@ -382,6 +410,18 @@
         refreshInterval = getUrlNumberParameter("refreshInterval", refreshInterval || 30); // in minutes
         rtcSleepMode = getUrlBooleanParameter("rtcSleepMode", !!rtcSleepMode);
         rtcWakeDelay = getUrlNumberParameter("rtcWakeDelay", rtcWakeDelay || 15); // in seconds
+        debug = getUrlBooleanParameter("debug", !!debug);
+
+        var _debugStartTime = null;
+        var _debugRefreshCount = 0;
+
+        if (debug) {
+            var storedStart = getUrlNumberParameter("debugStart", null);
+            if (storedStart) {
+                _debugStartTime = moment(storedStart);
+                _debugRefreshCount = getUrlNumberParameter("debugRC", 0);
+            }
+        }
 
         var dataTimeZone = 0;
 
@@ -472,26 +512,31 @@
             cityName = document.getElementById("city");
             cityName.addEventListener('click', function (event) {
                 event.preventDefault();
-                window.location.href = window.location.href.replace("/index.html", "/config.html");
+                window.location.href = buildUrl(window.location.href.replace("/index.html", "/config.html"), {});
                 return false
             });
             temp.addEventListener('click', function (event) {
                 event.preventDefault();
-                var newHref = window.location.href.replace(/[&?]tempType=[^&]*/, "");
-                newHref = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + "tempType=" + (tempType === "feelsLike" ? "actual" : "feelsLike")
-                window.location.href = newHref
+                window.location.href = buildUrl(null, {tempType: tempType === "feelsLike" ? "actual" : "feelsLike"});
                 return false
             });
             var forecastContainer = document.getElementById("forecast");
             forecastContainer.addEventListener('click', function (event) {
                 event.preventDefault();
-                var newHref = window.location.href.replace(/[&?]forecastType=[^&]*/, "");
-                newHref = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + "forecastType=" + (forecastType === "daily" ? "hour" : "daily");
-                window.location.href = newHref;
+                window.location.href = buildUrl(null, {forecastType: forecastType === "daily" ? "hour" : "daily"});
                 return false;
             });
             description = document.getElementById("description");
             lastUpdate = document.getElementById("lastUpdate");
+            if (debug) {
+                lastUpdate.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    _debugStartTime = moment();
+                    _debugRefreshCount = 0;
+                    window.location.href = buildUrl(null, {});
+                    return false;
+                });
+            }
             date = document.getElementById("date");
             sun = document.getElementById("sun");
 
@@ -503,6 +548,10 @@
                     desc: document.getElementById("desc" + (i + 1)),
                     time: document.getElementById("time" + (i + 1)),
                 });
+            }
+
+            if (debug && !_debugStartTime) {
+                _debugStartTime = moment();
             }
 
             refreshData();
