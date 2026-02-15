@@ -74,6 +74,7 @@
         <label>Language: <br/>
             <select name="lang" id="lang">
                 <!-- a;b (a == owm lang, b = moment locale (if different))-->
+                <option value="">default</option>
                 <option value="sk">Slovak (sk)</option>
                 <option value="en">English (en)</option>
                 <option value="af">Afrikaans (af)</option>
@@ -126,48 +127,48 @@
     <div>
         <label>Rotation: <br/>
             <select name="rotation" id="rotation">
+                <option value="">default</option>
                 <option value="none">None</option>
                 <option value="ll">Landscape Left</option>
                 <option value="lr">Landscape right</option>
                 <option value="up">Upside down</option>
-                <option value="">default</option>
             </select>
         </label>
     </div>
     <div>
         <label>Units: <br/>
             <select name="units" id="units">
+                <option value="">default</option>
                 <option value="metric">Metric - °C</option>
                 <option value="imperial">Imperial - Fahrenheit</option>
-                <option value="">default</option>
             </select>
         </label>
     </div>
     <div>
         <label>Show: <br/>
             <select name="tempType" id="tempType">
+                <option value="">default</option>
                 <option value="actual">Actual temperature</option>
                 <option value="feelsLike">Feels like temperature</option>
-                <option value="">default</option>
             </select>
         </label>
     </div>
     <div>
         <label>Forecast: <br/>
             <select name="forecastType" id="forecastType">
+                <option value="">default</option>
                 <option value="hour">Hourly (3h steps)</option>
                 <option value="daily">Daily</option>
-                <option value="">default</option>
             </select>
         </label>
     </div>
     <div>
         <label>Night Mode: <br/>
             <select name="night" id="night">
+                <option value="">default</option>
                 <option value="off">off</option>
                 <option value="auto">sunset - sunrise</option>
                 <option value="on">always</option>
-                <option value="">default</option>
             </select>
         </label>
     </div>
@@ -181,6 +182,7 @@
         <input type="submit" value="Show Dashboard"/>
     </div>
 </form>
+<div><small>"default" means the value from your <strong>config.js</strong> file will be used, or a built-in fallback if not configured there.</small></div>
 <div>Source ane more info: <a href="https://github.com/matopeto/kindle-weather-dashboard" target="_blank" rel="noopener">https://github.com/matopeto/kindle-weather-dashboard</a></div>
 <script type="application/javascript">
     var params={};
@@ -190,42 +192,24 @@
             }
         );
 
-    if (params["city"] != undefined) {
-        document.getElementById("city").value = params["city"];
+    function setIfPresent(name) {
+        if (params[name] != undefined && params[name] !== "") {
+            document.getElementById(name).value = params[name];
+        }
     }
-    if (params["lat"] != undefined) {
-        document.getElementById("lat").value = params["lat"];
-    }
-    if (params["lon"] != undefined) {
-        document.getElementById("lon").value = params["lon"];
-    }
-    if (params["lang"] != undefined) {
-        document.getElementById("lang").value = params["lang"];
-    }
-    if (params["rotation"] != undefined) {
-        document.getElementById("rotation").value = params["rotation"];
-    }
-    if (params["units"] != undefined) {
-        document.getElementById("units").value = params["units"];
-    }
-    if (params["night"] != undefined) {
-        document.getElementById("night").value = params["night"];
-    }
-    if (params["appId"] != undefined) {
-        document.getElementById("appId").value = params["appId"];
-    }
-    if (params["utcOffset"] != undefined) {
-        document.getElementById("utcOffset").value = params["utcOffset"];
-    }
-    if (params["tempType"] != undefined) {
-        document.getElementById("tempType").value = params["tempType"];
-    }
-    if (params["forecastType"] != undefined) {
-        document.getElementById("forecastType").value = params["forecastType"];
-    }
-    if (params["refreshTime"] != undefined) {
-        document.getElementById("refreshTime").value = params["refreshTime"];
-    }
+
+    setIfPresent("city");
+    setIfPresent("lat");
+    setIfPresent("lon");
+    setIfPresent("lang");
+    setIfPresent("rotation");
+    setIfPresent("units");
+    setIfPresent("night");
+    setIfPresent("appId");
+    setIfPresent("utcOffset");
+    setIfPresent("tempType");
+    setIfPresent("forecastType");
+    setIfPresent("refreshTime");
 </script>
 </body>
 </html>

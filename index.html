@@ -169,11 +169,11 @@
             }
 
             var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
-            lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
+            lang = getUrlParameter("lang") ? getUrlParameter("lang") : (api_lang || "en");
             if (typeof(lang) === 'string') {
                 lang = lang.split(";", 1)
             }
-            var units = getUrlParameter("units") ? getUrlParameter("units") : api_units;
+            var units = getUrlParameter("units") ? getUrlParameter("units") : (api_units || "metric");
 
             var locParams = api_locParams;
             if (getUrlParameter("city")) {
