@@ -93,7 +93,7 @@
             refreshForecastWeather();
 
             if (!rtcSleepMode) {
-                window.setTimeout("refreshData()", refreshTime);
+                window.setTimeout("refreshData()", refreshInterval * 60 * 1000);
             }
         }
 
@@ -156,30 +156,16 @@
         }
 
         function getApiParams() {
-            if (getUrlParameter("api_params")) {
-                var url = getUrlParameter("api_params");
-                setsUnitsSymbolFromApiUrl(url)
-                return url;
-            }
-
-            if (api_params) {
-                var url = api_params;
-                setsUnitsSymbolFromApiUrl(url)
-                return url;
-            }
-
-            var appId = getUrlParameter("appId") ? getUrlParameter("appId") : api_appId;
-            lang = getUrlParameter("lang") ? getUrlParameter("lang") : (api_lang || "en");
+            var apiLang = lang;
             if (typeof(lang) === 'string') {
-                lang = lang.split(";", 1)
+                apiLang = lang.split(";", 1)
             }
-            var units = getUrlParameter("units") ? getUrlParameter("units") : (api_units || "metric");
 
-            var locParams = api_locParams;
-            if (getUrlParameter("city")) {
-                locParams = "q=" + encodeURIComponent(getUrlParameter("city"));
-            } else if (getUrlParameter("lat") && getUrlParameter("lon")) {
-                locParams = "lat=" + encodeURIComponent(getUrlParameter("lat")) + "&lon=" + encodeURIComponent(getUrlParameter("lon"));
+            var locParams = null;
+            if (lat != null && lat !== "" && lon != null && lon !== "") {
+                locParams = "lat=" + encodeURIComponent(lat) + "&lon=" + encodeURIComponent(lon);
+            } else if (city) {
+                locParams = "q=" + encodeURIComponent(city);
             }
 
             if (!locParams || !appId) {
@@ -191,13 +177,13 @@
                 url += locParams;
             }
             if (appId) {
-                url += "&appid=" + appId;
+                url += "&appid=" + encodeURIComponent(appId);
             }
-            if (lang) {
-                url += "&lang=" + lang;
+            if (apiLang) {
+                url += "&lang=" + encodeURIComponent(apiLang);
             }
             if (units) {
-                url += "&units=" + units;
+                url += "&units=" + encodeURIComponent(units);
             }
 
             setsUnitsSymbolFromApiUrl(url)
@@ -213,6 +199,39 @@
             return decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
+        function getUrlStringParameter(name, defaultValue) {
+            var value = getUrlParameter(name);
+            return value === null || value === "" ? defaultValue : value;
+        }
+
+        function getUrlNumberParameter(name, defaultValue) {
+            var value = getUrlParameter(name);
+            if (value === null || value === "") {
+                return defaultValue;
+            }
+
+            var parsed = Number(value);
+            return isNaN(parsed) ? defaultValue : parsed;
+        }
+
+        function getUrlBooleanParameter(name, defaultValue) {
+            var value = getUrlParameter(name);
+            if (value === null || value === "") {
+                return defaultValue;
+            }
+
+            switch (value.toLowerCase()) {
+                case "true":
+                case "1":
+                    return true;
+                case "false":
+                case "0":
+                    return false;
+                default:
+                    return defaultValue;
+            }
+        }
+
         RegExp.escape = function (s) {
             return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         };
@@ -226,7 +245,7 @@
             icon.style.webkitTransform = null;
             temp.innerHTML = feelsLike ? Math.round(data.main.feels_like) : Math.round(data.main.temp);
             temp.className = feelsLike ? "feelsLike" : "";
-            city.innerHTML = data.name;
+            cityName.innerHTML = data.name;
             description.innerHTML = data.weather[0].description;
             lastUpdate.innerHTML = momentWithCorrectUtcOffset(new Date()).format(timeFormat) + "/" + momentWithCorrectUtcOffset(new Date(data.dt * 1000)).format(timeFormat);
 
@@ -299,12 +318,11 @@
         var page = null;
         var temp = null;
         var icon = null;
-        var city = null;
+        var cityName = null;
         var description = null;
         var lastUpdate = null;
         var date = null;
         var sun = null;
-        var lang = null;
 
         var forecastsCells = null;
 
@@ -348,15 +366,22 @@
         var timeFormat = "HH:mm";
 
         // Config parameters.
-        var api_params, api_appId, api_lang, api_units, api_locParams, rotation, night_mode, refreshTime, utcOffset, tempType, forecastType, rtcSleepMode, rtcWakeDelay;
+        var city, lat, lon, appId, lang, units, nightMode, rotation, refreshInterval, utcOffset, tempType, forecastType, rtcSleepMode, rtcWakeDelay;
 
-        utcOffset = getUrlParameter("utcOffset") ? getUrlParameter("utcOffset") : utcOffset;
-        tempType = getUrlParameter("tempType") ? getUrlParameter("tempType") : tempType;
-        forecastType = getUrlParameter("forecastType") ? getUrlParameter("forecastType") : forecastType;
-        refreshTime = getUrlParameter("refreshTime") ? getUrlParameter("refreshTime") * 60 * 1000 : refreshTime; // URL: minutes, config.js: milliseconds
-        rtcSleepMode = getUrlParameter("rtcSleepMode") ? getUrlParameter("rtcSleepMode") === "true" : !!rtcSleepMode;
-        rtcWakeDelay = getUrlParameter("rtcWakeDelay") ? getUrlParameter("rtcWakeDelay") * 1000 : rtcWakeDelay; // URL: seconds, config.js: milliseconds
-        
+        city = getUrlStringParameter("city", city);
+        lat = getUrlStringParameter("lat", lat);
+        lon = getUrlStringParameter("lon", lon);
+        appId = getUrlStringParameter("appId", appId);
+        lang = getUrlStringParameter("lang", lang || "en");
+        units = getUrlStringParameter("units", units || "metric");
+        nightMode = getUrlStringParameter("nightMode", nightMode || "off");
+        rotation = getUrlStringParameter("rotation", rotation);
+        utcOffset = getUrlStringParameter("utcOffset", utcOffset);
+        tempType = getUrlStringParameter("tempType", tempType || "actual");
+        forecastType = getUrlStringParameter("forecastType", forecastType || "hour");
+        refreshInterval = getUrlNumberParameter("refreshInterval", refreshInterval || 30); // in minutes
+        rtcSleepMode = getUrlBooleanParameter("rtcSleepMode", !!rtcSleepMode);
+        rtcWakeDelay = getUrlNumberParameter("rtcWakeDelay", rtcWakeDelay || 15); // in seconds
 
         var dataTimeZone = 0;
 
@@ -366,23 +391,13 @@
 
         var _apiParams = null;
 
-        if (!refreshTime) {
-            refreshTime = 30 * 60 * 1000; // default 30 minutes
-        }
-        if (!rtcWakeDelay) {
-            rtcWakeDelay = 15 * 1000; // default 15 seconds
-        }
-        if (!forecastType) {
-            forecastType = "hour";
-        }
 
         function rotate() {
-            var rot = getUrlParameter("rotation") ? getUrlParameter("rotation") : rotation;
-
+            
             var v = viewport();
             var isPortrait = v.height > v.width;
 
-            if (isPortrait && rot === "ll") {
+            if (isPortrait && rotation === "ll") {
                 // landscape left
                 page.className = "landscape";
                 forcedRotation = true;
@@ -396,7 +411,7 @@
 
                 page.style.height = v.width + "px";
                 page.style.width = v.height + "px";
-            } else if (isPortrait && rot === "lr") {
+            } else if (isPortrait && rotation === "lr") {
                 // landscape right
                 page.className = "landscape";
                 forcedRotation = true;
@@ -410,7 +425,7 @@
 
                 page.style.height = v.width + "px";
                 page.style.width = v.height + "px";
-            } else if (rot === "up") {
+            } else if (rotation === "up") {
                 // upside down
                 page.className = isPortrait ? "portrait" : "landscape";
                 forcedRotation = false;
@@ -443,6 +458,7 @@
             _apiParams = getApiParams();
             if (_apiParams === null) {
                 window.location = "config.html";
+                return;
             }
 
             moment.locale(momentLocale());
@@ -453,8 +469,8 @@
             temp = document.getElementById("temp");
             icon = document.getElementById("icon");
 
-            city = document.getElementById("city");
-            city.addEventListener('click', function (event) {
+            cityName = document.getElementById("city");
+            cityName.addEventListener('click', function (event) {
                 event.preventDefault();
                 window.location.href = window.location.href.replace("/index.html", "/config.html");
                 return false
@@ -498,13 +514,13 @@
                 setInterval(function() {
                     var now = new Date().getTime();
                     var sinceRefresh = now - lastRefresh;
-                    if (sinceRefresh > refreshTime && !wakeDelayActive) {
+                    if (sinceRefresh > refreshInterval * 60 * 1000 && !wakeDelayActive) {
                         wakeDelayActive = true;
                         setTimeout(function() {
                             lastRefresh = new Date().getTime();
                             refreshData();
                             wakeDelayActive = false;
-                        }, rtcWakeDelay);
+                        }, rtcWakeDelay * 1000);
                     }
                 }, 1000);
             }
@@ -559,7 +575,7 @@
         }
 
         function isNightMode() {
-            var mode = getUrlParameter("night") ? getUrlParameter("night") : night_mode;
+            var mode = nightMode;
             if (mode === "on") {
                 return true;
             }
@@ -591,9 +607,8 @@
         }
 
         function momentLocale() {
-            var lang = getUrlParameter("lang") ? getUrlParameter("lang") : api_lang;
             if (typeof(lang) === 'string') {
-                var langs = lang.split(";", 2)
+                var langs = String(lang).split(";", 2)
                 return langs.length > 1 ? langs[1] : langs[0];
             } else {
                 return null;
