@@ -1,16 +1,19 @@
-var api_locParams = "lat=50.1243111&lon=14.4901953";
-// or api_locParams = "q=Paris";
-var api_appId = "YOUR_API_KEY";
-var api_lang = "sk"
-var api_units = "metric"; 
+// Location by city name
+var city = "Paris";
+// or by GPS coordinates
+// var lat = "50.1243111";
+// var lon = "14.4901953";
 
-var api_params = null;
+var appId = "YOUR_API_KEY";
+var lang = "sk"
+var units = "metric";
+
 
 // Forecast type: "hour" (3h steps) or "daily"
 var forecastType = "hour";
 
-// refresh time in miliseconds (default 30 mins)
-var refreshTime = 30 * 60 * 1000;
+// Refresh interval in minutes (default 30)
+var refreshInterval = 30;
 
 // Browser in kindle paperwhite doesn't support rotation.
 // You can override with this parameter 'll' and 'lr' for landscape left/right, 'up' for upside down.
@@ -20,7 +23,7 @@ var refreshTime = 30 * 60 * 1000;
 // "auto" - by sunrise and sunset,
 // "HH-HH - like: ""22-06", from 22:00 to 06:00
 // "on" - night mode all the day :)
-var night_mode = "off";
+var nightMode = "off";
 
 // Timezone offset - kindle doesnt report correct local time to the kindle (always it is GMT),
 // You can set custom GMT offset, in format "+08:00".

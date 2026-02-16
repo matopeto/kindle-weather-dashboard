@@ -34,7 +34,7 @@ Icons source: https://github.com/erikflowers/weather-icons
 # How to run directly on the Kindle (tested on Kindle PW 3)
 1. clone or download repository
 2. generate your free API key (AppId) at http://openweathermap.org/appid
-3. rename `config.js.sample` to `config.js` and set the parameters you need (all parameters are optional and can be set in the HTML webpage `config.html`, but I recommend setting at least the `api_appId`)
+3. rename `config.js.sample` to `config.js` and set the parameters you need (all parameters are optional and can be set in the HTML webpage `config.html`, but I recommend setting at least the `appId`)
 4. copy the folder with all files to the root of Kindle storage
 5. disable the screensaver on your Kindle:
   * press the search button (or keyboard button on Kindle 4) on homescreen and type: `;debugOn` and press enter on the keyboard
@@ -42,35 +42,27 @@ Icons source: https://github.com/erikflowers/weather-icons
 6. launch the browser on your Kindle and go to: `file:///mnt/us/kindle-weather-dashboard/index.html` (where `kindle-weather-dashboard` is the folder in the root of your Kindle storage from step 4)
 
 ## Configuration
-### with config.js
-create a config.js file from config.js.sample and set variables:
+Parameters can be set in `config.js`, URL query parameters, or through `config.html`.
 
-* `api_locParams` - query parameters to set location (e.g. `lat=50&lon=14`, or `q=Paris`)
-* `api_appId` - set your `API KEY (appId)` from http://openweathermap.org/appid
-* `api_lang` - output language (e.g. `en`, default: `en`)
-* `api_units` - units: `metric` (°C), `imperial` (°F), `standard` (K) (default: `metric`)
-* or you can set all API parameters at once with the `api_params` variable (e.g. `q=Prague&appid=YOUR_API_KEY&lang=sk&units=metric`). **Note:** when `api_params` is set, `api_locParams`, `api_appId`, `api_lang`, `api_units` and their URL counterparts (`city`, `lat`, `lon`, `appId`, `lang`, `units`) are ignored.
-* `rotation` - force rotation (on Kindle Paperwhite) `ll` for left landscape, `lr` for right landscape, and `up` for upside down (default: none)
-* `night_mode` - `auto` - based on sunrise and sunset, `on` - always on, `HH-HH` (`22-06`) interval for on/off, `off` or `null` to disable (default: `off`)
-* `refreshTime` - refresh rate in milliseconds (default: 30 minutes)
-* `utcOffset` - if not set, it is determined by location (default: `auto`), `local` - local machine UTC offset, or custom UTC offset. (Because Kindle doesn't report the correct local time. You may need to change the value after the winter/summer time change)
-* `tempType` - use `feelsLike` for current weather and hourly forecast; daily forecast uses actual min/max temps (default: `actual`)
-* `forecastType` - `hour` for 3-hour steps or `daily` for daily forecast (default: `hour`)
+Parameters:
+* `city` - city name (e.g. `Paris`), default: not set
+* `lat`, `lon` - GPS coordinates (e.g. `lat=50.1243111`, `lon=14.4901953`), default: not set
+* `appId` - OpenWeather API key, default: not set
+* `lang` - output language (e.g. `en`), default: `en`
+* `units` - `metric` (°C), `imperial` (°F), `standard` (K), default: `metric`
+* `rotation` - `ll`, `lr`, `up`, or not set (no forced rotation), default: not set
+* `nightMode` - `off`, `auto`, `on`, or `HH-HH` (e.g. `22-06`), default: `off`
+* `refreshInterval` - refresh interval in minutes, default: `30`
+* `utcOffset` - auto by location (not set), `local`, or custom UTC offset (`+08:00`), default: auto by location
+* `tempType` - `actual` or `feelsLike`, default: `actual`
+* `forecastType` - `hour` or `daily`, default: `hour`
+
+Precedence:
+* URL query parameters override values from `config.js`.
+* If neither URL nor `config.js` provides a value, built-in defaults are used.
+* For location, when both `city` and `lat`/`lon` are set, `lat`/`lon` take priority.
 
 See more: http://openweathermap.org/current, http://openweathermap.org/forecast and http://openweathermap.org/forecast16
-
-### with url query parameters
-* `appId` sets the appId
-* `city` sets the city (e.g. `city=Paris`)
-* `lat`, `lon` set location (e.g. `lat=50&lon=14`)
-* `lang` sets language (default: `en`)
-* `units` sets units: `metric` (°C), `imperial` (°F), `standard` (K) (default: `metric`)
-* `rotation` sets the rotation (default: none)
-* `utcOffset` sets UTC offset (default: auto by location)
-* `tempType` sets temperature type - `actual` or `feelsLike` (default: `actual`)
-* `forecastType` sets forecast type - `hour` or `daily` (default: `hour`)
-* `night` sets night mode - `off`, `auto`, `on` (default: `off`)
-* `refreshTime` sets refresh interval in minutes (default: 30)
 
 Examples:
 * Dashboard for Prague, metric units, Slovak language: `http://YOUR_URL/?city=Prague&lang=sk&units=metric&appId=YOUR_API_KEY`

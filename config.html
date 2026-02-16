@@ -164,7 +164,7 @@
     </div>
     <div>
         <label>Night Mode: <br/>
-            <select name="night" id="night">
+            <select name="nightMode" id="nightMode">
                 <option value="">default</option>
                 <option value="off">off</option>
                 <option value="auto">sunset - sunrise</option>
@@ -173,7 +173,7 @@
         </label>
     </div>
     <div>
-        <label>Refresh time (leave it blank for default): <br/><input type="text" name="refreshTime" id="refreshTime"/></label>
+        <label>Refresh interval in minutes (leave it blank for default): <br/><input type="text" name="refreshInterval" id="refreshInterval"/></label>
     </div>
     <div>
         <label>OWM appid (leave it blank for default): <br/><input type="text" name="appId" id="appId"/></label>
@@ -204,12 +204,12 @@
     setIfPresent("lang");
     setIfPresent("rotation");
     setIfPresent("units");
-    setIfPresent("night");
+    setIfPresent("nightMode");
     setIfPresent("appId");
     setIfPresent("utcOffset");
     setIfPresent("tempType");
     setIfPresent("forecastType");
-    setIfPresent("refreshTime");
+    setIfPresent("refreshInterval");
 </script>
 </body>
 </html>
